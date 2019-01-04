@@ -9,3 +9,5 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
+
+void display(char * board);
