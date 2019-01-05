@@ -37,8 +37,9 @@ void display(char * board) {
 
 int main(int argc, char const *argv[]) {
   char board[64];
+  int is_ongoing = 1;
 
-  // initialize board
+  // initialize checkers board
   int pos;
   for(pos = 0; pos < 24; pos++) {
     if (pos < 8 || pos >= 16) {
@@ -82,5 +83,12 @@ int main(int argc, char const *argv[]) {
 
   printf("Start Checkers Game: \n");
   display(board);
+
+  char move[4];
+  while(is_ongoing) {
+    printf("Select a piece to move: \n");
+    fgets(move, 4, stdin);
+    is_ongoing = 0;
+  }
   return 0;
 }
