@@ -88,6 +88,8 @@ int main(int argc, char const *argv[]) {
   while(is_ongoing) {
     printf("Select a piece to move: \n");
     fgets(move, 4, stdin);
+    move[strlen(move)-1] = '\0';
+    printf("Select where to move it: \n");
     is_ongoing = 0;
   }
   return 0;
