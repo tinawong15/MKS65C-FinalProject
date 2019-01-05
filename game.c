@@ -86,6 +86,7 @@ int main(int argc, char const *argv[]) {
 
   char piece[256];
   char move[4];
+  int amount_of_moves = 0;
   int turn = 1; // 1 if it is white team's turn, 2 if it is red team's turn
   while(is_ongoing) {
     if(turn == 1) {
@@ -104,9 +105,14 @@ int main(int argc, char const *argv[]) {
       printf("Select where to move it: \n");
       fgets(move, 4, stdin);
       move[strlen(move)-1] = '\0';
-      turn = 2;
+      turn = 1;
     }
-    is_ongoing = 0;
+    amount_of_moves++;
+    if(amount_of_moves == 50) {
+      printf("50 moves have been reached. Game is a draw.\n");
+      is_ongoing = 0;
+    }
+    is_ongoing = 0; // TODO: remove when move/jump fxns are implemented, here just to end the while loop
   }
   return 0;
 }
