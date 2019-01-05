@@ -84,12 +84,17 @@ int main(int argc, char const *argv[]) {
   printf("Start Checkers Game: \n");
   display(board);
 
+  char piece[256];
   char move[4];
+  int turn = 1; // 1 if it is white team's turn, 2 if it is red team's turn
   while(is_ongoing) {
     printf("Select a piece to move: \n");
-    fgets(move, 4, stdin);
+    fgets(piece, 256, stdin);
     move[strlen(move)-1] = '\0';
     printf("Select where to move it: \n");
+    fgets(move, 4, stdin);
+    move[strlen(move)-1] = '\0';
+    turn = 2;
     is_ongoing = 0;
   }
   return 0;
