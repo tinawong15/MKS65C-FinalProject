@@ -94,6 +94,25 @@ int get_piece_position(char * input, char * board) {
   return pos;
 }
 
+int is_viable_move(char * piece, char * move, char * board) {
+  int piece_index = get_piece_position(piece, board);
+  int move_index = get_piece_position(move, board);
+
+  // move diagonally
+  if(board[piece_index] == 'x') {
+    if(piece_index + 7 == move_index || piece_index + 9 == move_index) {
+      return 1;
+    }
+  }
+  else { // board piece is a 'o' (red)
+    if(move_index + 7 == piece_index || move_index + 9 == piece_index) {
+      return 1;
+    }
+  }
+  // jump
+  return 0;
+}
+
 int main(int argc, char const *argv[]) {
   char board[64];
   int is_ongoing = 1;
@@ -156,11 +175,19 @@ int main(int argc, char const *argv[]) {
         user_piece[strlen(user_piece)-1] = '\0';
         selected_piece = board[get_piece_position(user_piece, board)];
         if(selected_piece == 'x') {
-          printf("Select where to move it [row][column]: \n");
-          fgets(user_move, 4, stdin);
-          user_move[strlen(user_move)-1] = '\0';
-          board[get_piece_position(user_move, board)] = selected_piece;
-          board[get_piece_position(user_piece, board)] = '-';
+          while(1) {
+            printf("Select where to move it [row][column]: \n");
+            fgets(user_move, 4, stdin);
+            user_move[strlen(user_move)-1] = '\0';
+            if(is_viable_move(user_piece, user_move, board) == 1) {
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              break;
+            }
+            else {
+              printf("You cannot move here. Try again.\n");
+            }
+          }
           break;
         }
         else {
@@ -176,11 +203,19 @@ int main(int argc, char const *argv[]) {
         user_piece[strlen(user_piece)-1] = '\0';
         selected_piece = board[get_piece_position(user_piece, board)];
         if(selected_piece == 'o') {
-          printf("Select where to move it [row][column]: \n");
-          fgets(user_move, 4, stdin);
-          user_move[strlen(user_move)-1] = '\0';
-          board[get_piece_position(user_move, board)] = selected_piece;
-          board[get_piece_position(user_piece, board)] = '-';
+          while(1) {
+            printf("Select where to move it [row][column]: \n");
+            fgets(user_move, 4, stdin);
+            user_move[strlen(user_move)-1] = '\0';
+            if(is_viable_move(user_piece, user_move, board) == 1) {
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              break;
+            }
+            else {
+              printf("You cannot move here. Try again.\n");
+            }
+          }
           break;
         }
         else {

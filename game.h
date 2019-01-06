@@ -13,3 +13,5 @@
 void display(char * board);
 
 int get_piece_position(char * input, char * board);
+
+int is_viable_move(char * piece, char * move, char * board);
