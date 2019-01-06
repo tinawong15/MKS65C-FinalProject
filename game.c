@@ -98,18 +98,33 @@ int is_viable_move(char * piece, char * move, char * board) {
   int piece_index = get_piece_position(piece, board);
   int move_index = get_piece_position(move, board);
 
-  // move diagonally
-  if(board[piece_index] == 'x') {
+  if(board[piece_index] == 'x') { // board piece is white
+    // move diagonally
     if(piece_index + 7 == move_index || piece_index + 9 == move_index) {
       return 1;
     }
-  }
-  else { // board piece is a 'o' (red)
-    if(move_index + 7 == piece_index || move_index + 9 == piece_index) {
+
+    // jump
+    else if (board[piece_index+7] == 'o' && piece_index + 14 == move_index && board[move_index] == '-') {
+      return 1;
+    }
+    else if (board[piece_index+9] == 'o' && piece_index + 18 == move_index && board[move_index] == '-') {
       return 1;
     }
   }
-  // jump
+  else { // board piece is an 'o' (red)
+    if(move_index + 7 == piece_index || move_index + 9 == piece_index) {
+      return 1;
+    }
+
+    // jump
+    else if (board[piece_index-7] == 'x' && piece_index - 14 == move_index && board[move_index] == '-') {
+      return 1;
+    }
+    else if (board[piece_index-9] == 'x' && piece_index - 18 == move_index && board[move_index] == '-') {
+      return 1;
+    }
+  }
   return 0;
 }
 
@@ -175,20 +190,17 @@ int main(int argc, char const *argv[]) {
         user_piece[strlen(user_piece)-1] = '\0';
         selected_piece = board[get_piece_position(user_piece, board)];
         if(selected_piece == 'x') {
-          while(1) {
-            printf("Select where to move it [row][column]: \n");
-            fgets(user_move, 4, stdin);
-            user_move[strlen(user_move)-1] = '\0';
-            if(is_viable_move(user_piece, user_move, board) == 1) {
-              board[get_piece_position(user_move, board)] = selected_piece;
-              board[get_piece_position(user_piece, board)] = '-';
-              break;
-            }
-            else {
-              printf("You cannot move here. Try again.\n");
-            }
+          printf("Select where to move it [row][column]: \n");
+          fgets(user_move, 4, stdin);
+          user_move[strlen(user_move)-1] = '\0';
+          if(is_viable_move(user_piece, user_move, board) == 1) {
+            board[get_piece_position(user_move, board)] = selected_piece;
+            board[get_piece_position(user_piece, board)] = '-';
+            break;
           }
-          break;
+          else {
+            printf("You cannot move here. Try again.\n");
+          }
         }
         else {
           printf("You cannot move this piece. Try again.\n");
@@ -203,20 +215,17 @@ int main(int argc, char const *argv[]) {
         user_piece[strlen(user_piece)-1] = '\0';
         selected_piece = board[get_piece_position(user_piece, board)];
         if(selected_piece == 'o') {
-          while(1) {
-            printf("Select where to move it [row][column]: \n");
-            fgets(user_move, 4, stdin);
-            user_move[strlen(user_move)-1] = '\0';
-            if(is_viable_move(user_piece, user_move, board) == 1) {
-              board[get_piece_position(user_move, board)] = selected_piece;
-              board[get_piece_position(user_piece, board)] = '-';
-              break;
-            }
-            else {
-              printf("You cannot move here. Try again.\n");
-            }
+          printf("Select where to move it [row][column]: \n");
+          fgets(user_move, 4, stdin);
+          user_move[strlen(user_move)-1] = '\0';
+          if(is_viable_move(user_piece, user_move, board) == 1) {
+            board[get_piece_position(user_move, board)] = selected_piece;
+            board[get_piece_position(user_piece, board)] = '-';
+            break;
           }
-          break;
+          else {
+            printf("You cannot move here. Try again.\n");
+          }
         }
         else {
           printf("You cannot move this piece. Try again.\n");
@@ -230,7 +239,7 @@ int main(int argc, char const *argv[]) {
       is_ongoing = 0;
     }
     display(board);
-    is_ongoing = 0; // TODO: remove when move/jump fxns are implemented, here just to end the while loop
+    // is_ongoing = 0; // TODO: remove when move/jump fxns are implemented, here just to end the while loop
   }
   return 0;
 }
