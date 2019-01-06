@@ -11,3 +11,5 @@
 #include <unistd.h>
 
 void display(char * board);
+
+int get_piece_position(char * input, char * board);

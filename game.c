@@ -18,21 +18,80 @@ X/O is kinged
 50 moves without a capture/kinging is a draw
 **/
 void display(char * board) {
-  printf("\n");
+  printf("\n   h  g  f  e  d  c  b  a\n1");
   int i;
+  int label = 2;
   int row_length = 0;
   for(i = 0; i < 64; i++) {
     if(row_length == 7) {
-      printf("%c\n", board[i]);
+      if(label < 9) {
+        printf("  %c\n%d", board[i], label);
+        label++;
+      }
+      else {
+        printf("  %c\n", board[i]);
+      }
       row_length = 0;
       // printf("Row length now: %d\n", row_length);
     }
     else {
-      printf("%c", board[i]);
+      printf("  %c", board[i]);
       row_length++;
     }
   }
   printf("\n");
+}
+
+int get_piece_position(char * input, char * board) {
+  int column;
+  if(input[0] == '1') {
+    column = 1;
+  }
+  else if(input[0] == '2') {
+    column = 2;
+  }
+  else if(input[0] == '3') {
+    column = 3;
+  }
+  else if(input[0] == '4') {
+    column = 4;
+  }
+  else if(input[0] == '5') {
+    column = 5;
+  }
+  else if(input[0] == '6') {
+    column = 6;
+  }
+  else if(input[0] == '7') {
+    column = 7;
+  }
+  else if(input[0] == '8') {
+    column = 8;
+  }
+  int pos = column * 8 - 1;
+  if(input[1] == 'h') {
+    pos = pos - 7;
+  }
+  else if(input[1] == 'g') {
+    pos = pos - 6;
+  }
+  else if(input[1] == 'f') {
+    pos = pos - 5;
+  }
+  else if(input[1] == 'e') {
+    pos = pos - 4;
+  }
+  else if(input[1] == 'd') {
+    pos = pos - 3;
+  }
+  else if(input[1] == 'c') {
+    pos = pos - 2;
+  }
+  else if(input[1] == 'b') {
+    pos = pos - 1;
+  }
+  // printf("Input: %s\n Index: %d\n Value at index: %c\n", input, pos, board[pos]);
+  return pos;
 }
 
 int main(int argc, char const *argv[]) {
@@ -84,27 +143,32 @@ int main(int argc, char const *argv[]) {
   printf("Start Checkers Game: \n");
   display(board);
 
-  char piece[256];
-  char move[4];
+  char user_piece[4];
+  char user_move[4];
+  char selected_piece;
   int amount_of_moves = 0;
   int turn = 1; // 1 if it is white team's turn, 2 if it is red team's turn
   while(is_ongoing) {
     if(turn == 1) {
-      printf("White checkers turn! Select a piece to move: \n");
-      fgets(piece, 256, stdin);
-      piece[strlen(piece)-1] = '\0';
-      printf("Select where to move it: \n");
-      fgets(move, 4, stdin);
-      move[strlen(move)-1] = '\0';
+      printf("White checkers turn! Select a piece to move [row][column]: \n");
+      fgets(user_piece, 4, stdin);
+      user_piece[strlen(user_piece)-1] = '\0';
+      selected_piece = board[get_piece_position(user_piece, board)];
+      printf("Select where to move it [row][column]: \n");
+      fgets(user_move, 4, stdin);
+      user_move[strlen(user_move)-1] = '\0';
+      board[get_piece_position(user_move, board)] = selected_piece;
+      board[selected_piece] = '-';
       turn = 2;
     }
     else {
       printf("Red checkers turn! Select a piece to move: \n");
-      fgets(piece, 256, stdin);
-      piece[strlen(piece)-1] = '\0';
-      printf("Select where to move it: \n");
-      fgets(move, 4, stdin);
-      move[strlen(move)-1] = '\0';
+      fgets(user_piece, 4, stdin);
+      user_piece[strlen(user_piece)-1] = '\0';
+      selected_piece = board[get_piece_position(user_piece, board)];
+      printf("Select where to move it [row][column]: \n");
+      fgets(user_move, 4, stdin);
+      user_move[strlen(user_move)-1] = '\0';
       turn = 1;
     }
     amount_of_moves++;
@@ -112,6 +176,7 @@ int main(int argc, char const *argv[]) {
       printf("50 moves have been reached. Game is a draw.\n");
       is_ongoing = 0;
     }
+    display(board);
     is_ongoing = 0; // TODO: remove when move/jump fxns are implemented, here just to end the while loop
   }
   return 0;
