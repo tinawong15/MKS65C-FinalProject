@@ -150,25 +150,43 @@ int main(int argc, char const *argv[]) {
   int turn = 1; // 1 if it is white team's turn, 2 if it is red team's turn
   while(is_ongoing) {
     if(turn == 1) {
-      printf("White checkers turn! Select a piece to move [row][column]: \n");
-      fgets(user_piece, 4, stdin);
-      user_piece[strlen(user_piece)-1] = '\0';
-      selected_piece = board[get_piece_position(user_piece, board)];
-      printf("Select where to move it [row][column]: \n");
-      fgets(user_move, 4, stdin);
-      user_move[strlen(user_move)-1] = '\0';
-      board[get_piece_position(user_move, board)] = selected_piece;
-      board[selected_piece] = '-';
+      while(1) {
+        printf("White checkers turn! Select a piece to move [row][column]: \n");
+        fgets(user_piece, 4, stdin);
+        user_piece[strlen(user_piece)-1] = '\0';
+        selected_piece = board[get_piece_position(user_piece, board)];
+        if(selected_piece == 'x') {
+          printf("Select where to move it [row][column]: \n");
+          fgets(user_move, 4, stdin);
+          user_move[strlen(user_move)-1] = '\0';
+          board[get_piece_position(user_move, board)] = selected_piece;
+          board[get_piece_position(user_piece, board)] = '-';
+          break;
+        }
+        else {
+          printf("You cannot move this piece. Try again.\n");
+        }
+      }
       turn = 2;
     }
     else {
-      printf("Red checkers turn! Select a piece to move: \n");
-      fgets(user_piece, 4, stdin);
-      user_piece[strlen(user_piece)-1] = '\0';
-      selected_piece = board[get_piece_position(user_piece, board)];
-      printf("Select where to move it [row][column]: \n");
-      fgets(user_move, 4, stdin);
-      user_move[strlen(user_move)-1] = '\0';
+      while(1) {
+        printf("Red checkers turn! Select a piece to move [row][column]: \n");
+        fgets(user_piece, 4, stdin);
+        user_piece[strlen(user_piece)-1] = '\0';
+        selected_piece = board[get_piece_position(user_piece, board)];
+        if(selected_piece == 'o') {
+          printf("Select where to move it [row][column]: \n");
+          fgets(user_move, 4, stdin);
+          user_move[strlen(user_move)-1] = '\0';
+          board[get_piece_position(user_move, board)] = selected_piece;
+          board[get_piece_position(user_piece, board)] = '-';
+          break;
+        }
+        else {
+          printf("You cannot move this piece. Try again.\n");
+        }
+      }
       turn = 1;
     }
     amount_of_moves++;
