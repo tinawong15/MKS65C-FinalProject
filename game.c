@@ -106,10 +106,10 @@ int is_viable_move(char * piece, char * move, char * board) {
 
     // jump
     else if (board[piece_index+7] == 'o' && piece_index + 14 == move_index && board[move_index] == '-') {
-      return 1;
+      return 2;
     }
     else if (board[piece_index+9] == 'o' && piece_index + 18 == move_index && board[move_index] == '-') {
-      return 1;
+      return 3;
     }
   }
   else { // board piece is an 'o' (red)
@@ -119,10 +119,10 @@ int is_viable_move(char * piece, char * move, char * board) {
 
     // jump
     else if (board[piece_index-7] == 'x' && piece_index - 14 == move_index && board[move_index] == '-') {
-      return 1;
+      return 2;
     }
     else if (board[piece_index-9] == 'x' && piece_index - 18 == move_index && board[move_index] == '-') {
-      return 1;
+      return 3;
     }
   }
   return 0;
@@ -180,6 +180,7 @@ int main(int argc, char const *argv[]) {
   char user_piece[4];
   char user_move[4];
   char selected_piece;
+  int selected_piece_index;
   int amount_of_moves = 0;
   int turn = 1; // 1 if it is white team's turn, 2 if it is red team's turn
   while(is_ongoing) {
@@ -194,6 +195,23 @@ int main(int argc, char const *argv[]) {
           fgets(user_move, 4, stdin);
           user_move[strlen(user_move)-1] = '\0';
           if(is_viable_move(user_piece, user_move, board) == 1) {
+            // moved diagonally
+            board[get_piece_position(user_move, board)] = selected_piece;
+            board[get_piece_position(user_piece, board)] = '-';
+            break;
+          }
+          else if(is_viable_move(user_piece, user_move, board) == 2) {
+            // then the piece jumped left
+            selected_piece_index = get_piece_position(user_piece, board);
+            board[selected_piece_index+7] = '-';
+            board[get_piece_position(user_move, board)] = selected_piece;
+            board[get_piece_position(user_piece, board)] = '-';
+            break;
+          }
+          else if(is_viable_move(user_piece, user_move, board) == 3) {
+            // then the piece jumped right
+            selected_piece_index = get_piece_position(user_piece, board);
+            board[selected_piece_index+9] = '-';
             board[get_piece_position(user_move, board)] = selected_piece;
             board[get_piece_position(user_piece, board)] = '-';
             break;
@@ -219,6 +237,23 @@ int main(int argc, char const *argv[]) {
           fgets(user_move, 4, stdin);
           user_move[strlen(user_move)-1] = '\0';
           if(is_viable_move(user_piece, user_move, board) == 1) {
+            // moved diagonally
+            board[get_piece_position(user_move, board)] = selected_piece;
+            board[get_piece_position(user_piece, board)] = '-';
+            break;
+          }
+          else if(is_viable_move(user_piece, user_move, board) == 2) {
+            // then the piece jumped right
+            selected_piece_index = get_piece_position(user_piece, board);
+            board[selected_piece_index-7] = '-';
+            board[get_piece_position(user_move, board)] = selected_piece;
+            board[get_piece_position(user_piece, board)] = '-';
+            break;
+          }
+          else if(is_viable_move(user_piece, user_move, board) == 3) {
+            // then the piece jumped left
+            selected_piece_index = get_piece_position(user_piece, board);
+            board[selected_piece_index-9] = '-';
             board[get_piece_position(user_move, board)] = selected_piece;
             board[get_piece_position(user_piece, board)] = '-';
             break;
@@ -239,7 +274,7 @@ int main(int argc, char const *argv[]) {
       is_ongoing = 0;
     }
     display(board);
-    // is_ongoing = 0; // TODO: remove when move/jump fxns are implemented, here just to end the while loop
+    is_ongoing = 0; // TODO: remove when move/jump fxns are implemented, here just to end the while loop
   }
   return 0;
 }
