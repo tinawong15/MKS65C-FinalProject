@@ -174,107 +174,117 @@ int main(int argc, char const *argv[]) {
     }
   }
 
-  printf("Start Checkers Game: \n");
-  display(board);
-
+  char start[3];
   char user_piece[4];
   char user_move[4];
   char selected_piece;
   int selected_piece_index;
   int amount_of_moves = 0;
   int turn = 1; // 1 if it is white team's turn, 2 if it is red team's turn
-  while(is_ongoing) {
-    if(turn == 1) {
-      while(1) {
-        printf("White checkers turn! Select a piece to move [row][column]: \n");
-        fgets(user_piece, 4, stdin);
-        user_piece[strlen(user_piece)-1] = '\0';
-        selected_piece = board[get_piece_position(user_piece, board)];
-        if(selected_piece == 'x') {
-          printf("Select where to move it [row][column]: \n");
-          fgets(user_move, 4, stdin);
-          user_move[strlen(user_move)-1] = '\0';
-          if(is_viable_move(user_piece, user_move, board) == 1) {
-            // moved diagonally
-            board[get_piece_position(user_move, board)] = selected_piece;
-            board[get_piece_position(user_piece, board)] = '-';
-            break;
-          }
-          else if(is_viable_move(user_piece, user_move, board) == 2) {
-            // then the piece jumped left
-            selected_piece_index = get_piece_position(user_piece, board);
-            board[selected_piece_index+7] = '-';
-            board[get_piece_position(user_move, board)] = selected_piece;
-            board[get_piece_position(user_piece, board)] = '-';
-            break;
-          }
-          else if(is_viable_move(user_piece, user_move, board) == 3) {
-            // then the piece jumped right
-            selected_piece_index = get_piece_position(user_piece, board);
-            board[selected_piece_index+9] = '-';
-            board[get_piece_position(user_move, board)] = selected_piece;
-            board[get_piece_position(user_piece, board)] = '-';
-            break;
-          }
-          else {
-            printf("You cannot move here. Try again.\n");
-          }
-        }
-        else {
-          printf("You cannot move this piece. Try again.\n");
-        }
-      }
-      turn = 2;
-    }
-    else {
-      while(1) {
-        printf("Red checkers turn! Select a piece to move [row][column]: \n");
-        fgets(user_piece, 4, stdin);
-        user_piece[strlen(user_piece)-1] = '\0';
-        selected_piece = board[get_piece_position(user_piece, board)];
-        if(selected_piece == 'o') {
-          printf("Select where to move it [row][column]: \n");
-          fgets(user_move, 4, stdin);
-          user_move[strlen(user_move)-1] = '\0';
-          if(is_viable_move(user_piece, user_move, board) == 1) {
-            // moved diagonally
-            board[get_piece_position(user_move, board)] = selected_piece;
-            board[get_piece_position(user_piece, board)] = '-';
-            break;
-          }
-          else if(is_viable_move(user_piece, user_move, board) == 2) {
-            // then the piece jumped right
-            selected_piece_index = get_piece_position(user_piece, board);
-            board[selected_piece_index-7] = '-';
-            board[get_piece_position(user_move, board)] = selected_piece;
-            board[get_piece_position(user_piece, board)] = '-';
-            break;
-          }
-          else if(is_viable_move(user_piece, user_move, board) == 3) {
-            // then the piece jumped left
-            selected_piece_index = get_piece_position(user_piece, board);
-            board[selected_piece_index-9] = '-';
-            board[get_piece_position(user_move, board)] = selected_piece;
-            board[get_piece_position(user_piece, board)] = '-';
-            break;
-          }
-          else {
-            printf("You cannot move here. Try again.\n");
-          }
-        }
-        else {
-          printf("You cannot move this piece. Try again.\n");
-        }
-      }
-      turn = 1;
-    }
-    amount_of_moves++;
-    if(amount_of_moves == 50) {
-      printf("50 moves have been reached. Game is a draw.\n");
-      is_ongoing = 0;
-    }
+
+  printf("Do you want to start playing? [y/n]\n");
+  fgets(start, 3, stdin);
+  start[strlen(start)-1] = '\0';
+  if(strcmp(start, "y") == 0) {
+    printf("Start Checkers Game: \n");
     display(board);
-    is_ongoing = 0; // TODO: remove when move/jump fxns are implemented, here just to end the while loop
+
+    while(is_ongoing) {
+      if(turn == 1) {
+        while(1) {
+          printf("White checkers turn! Select a piece to move [row][column]: \n");
+          fgets(user_piece, 4, stdin);
+          user_piece[strlen(user_piece)-1] = '\0';
+          selected_piece = board[get_piece_position(user_piece, board)];
+          if(selected_piece == 'x') {
+            printf("Select where to move it [row][column]: \n");
+            fgets(user_move, 4, stdin);
+            user_move[strlen(user_move)-1] = '\0';
+            if(is_viable_move(user_piece, user_move, board) == 1) {
+              // moved diagonally
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 2) {
+              // then the piece jumped left
+              selected_piece_index = get_piece_position(user_piece, board);
+              board[selected_piece_index+7] = '-';
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 3) {
+              // then the piece jumped right
+              selected_piece_index = get_piece_position(user_piece, board);
+              board[selected_piece_index+9] = '-';
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              break;
+            }
+            else {
+              printf("You cannot move here. Try again.\n");
+            }
+          }
+          else {
+            printf("You cannot move this piece. Try again.\n");
+          }
+        }
+        turn = 2;
+      }
+      else {
+        while(1) {
+          printf("Red checkers turn! Select a piece to move [row][column]: \n");
+          fgets(user_piece, 4, stdin);
+          user_piece[strlen(user_piece)-1] = '\0';
+          selected_piece = board[get_piece_position(user_piece, board)];
+          if(selected_piece == 'o') {
+            printf("Select where to move it [row][column]: \n");
+            fgets(user_move, 4, stdin);
+            user_move[strlen(user_move)-1] = '\0';
+            if(is_viable_move(user_piece, user_move, board) == 1) {
+              // moved diagonally
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 2) {
+              // then the piece jumped right
+              selected_piece_index = get_piece_position(user_piece, board);
+              board[selected_piece_index-7] = '-';
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 3) {
+              // then the piece jumped left
+              selected_piece_index = get_piece_position(user_piece, board);
+              board[selected_piece_index-9] = '-';
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              break;
+            }
+            else {
+              printf("You cannot move here. Try again.\n");
+            }
+          }
+          else {
+            printf("You cannot move this piece. Try again.\n");
+          }
+        }
+        turn = 1;
+      }
+      amount_of_moves++;
+      if(amount_of_moves == 50) {
+        printf("50 moves have been reached. Game is a draw.\n");
+        is_ongoing = 0;
+      }
+      display(board);
+      is_ongoing = 0; // TODO: remove when move/jump fxns are implemented, here just to end the while loop
+    }
+  }
+  else {
+    exit(0);
   }
   return 0;
 }
