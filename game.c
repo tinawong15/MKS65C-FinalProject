@@ -94,12 +94,36 @@ int get_piece_position(char * input, char * board) {
   return pos;
 }
 
+int check_opponents(char * piece, char * board) {
+  int piece_index = get_piece_position(piece, board);
+  //top left
+  if (piece_index - 9 != '-' && board[piece_index - 9] != board[piece_index])
+    return 1;
+  //top right
+  else if (piece_index - 7 != '-' && board[piece_index - 7] != board[piece_index])
+    return 2;
+  //bottom left
+  else if(piece_index + 7 != '-' && board[piece_index + 7] != board[piece_index])
+    return 3;
+  //bottom right
+  else if(piece_index + 9 != '-' && board[piece_index + 9] != board[piece_index])
+    return 4;
+  //no opponent
+  else
+    return 0;
+}
+
 int is_viable_move(char * piece, char * move, char * board) {
   int piece_index = get_piece_position(piece, board);
   int move_index = get_piece_position(move, board);
 
   if(board[piece_index] == 'x') { // board piece is white
     // move diagonally
+    if (check_opponents(piece, board))
+      printf("found an opponent destrOY!");
+
+
+
     if(piece_index + 7 == move_index || piece_index + 9 == move_index) {
       return 1;
     }
@@ -175,13 +199,15 @@ int main(int argc, char const *argv[]) {
   }
 
   char start[3];
+
   char user_piece[4];
   char user_move[4];
   char selected_piece;
   int selected_piece_index;
   int amount_of_moves = 0;
+  int num_white = 12;
+  int num_red = 12;
   int turn = 1; // 1 if it is white team's turn, 2 if it is red team's turn
-
   printf("Do you want to start playing? [y/n]\n");
   fgets(start, 3, stdin);
   start[strlen(start)-1] = '\0';
@@ -212,6 +238,8 @@ int main(int argc, char const *argv[]) {
               board[selected_piece_index+7] = '-';
               board[get_piece_position(user_move, board)] = selected_piece;
               board[get_piece_position(user_piece, board)] = '-';
+              num_red --;
+
               break;
             }
             else if(is_viable_move(user_piece, user_move, board) == 3) {
@@ -220,6 +248,8 @@ int main(int argc, char const *argv[]) {
               board[selected_piece_index+9] = '-';
               board[get_piece_position(user_move, board)] = selected_piece;
               board[get_piece_position(user_piece, board)] = '-';
+              num_red --;
+
               break;
             }
             else {
@@ -254,6 +284,7 @@ int main(int argc, char const *argv[]) {
               board[selected_piece_index-7] = '-';
               board[get_piece_position(user_move, board)] = selected_piece;
               board[get_piece_position(user_piece, board)] = '-';
+              num_white --;
               break;
             }
             else if(is_viable_move(user_piece, user_move, board) == 3) {
@@ -262,6 +293,8 @@ int main(int argc, char const *argv[]) {
               board[selected_piece_index-9] = '-';
               board[get_piece_position(user_move, board)] = selected_piece;
               board[get_piece_position(user_piece, board)] = '-';
+              num_white --;
+
               break;
             }
             else {
@@ -279,12 +312,22 @@ int main(int argc, char const *argv[]) {
         printf("50 moves have been reached. Game is a draw.\n");
         is_ongoing = 0;
       }
+      if (num_white == 0) {
+        printf("All white pieces have been taken. Red team wins. \n");
+        is_ongoing = 0;
+      }
+      if (num_red == 0) {
+        printf("All red pieces have been taken. White team wins. \n");
+        is_ongoing = 0;
+      }
       display(board);
-      is_ongoing = 0; // TODO: remove when move/jump fxns are implemented, here just to end the while loop
+      //is_ongoing = 0; // TODO: remove when move/jump fxns are implemented, here just to end the while loop
     }
   }
   else {
     exit(0);
   }
+
+
   return 0;
 }
