@@ -1,8 +1,8 @@
-all: game.o
-	gcc game.o
+all: game2.o
+	gcc game2.o
 
-game.o: game.c game.h
-	gcc -c game.c
+game2.o: game2.c game.h
+	gcc -c game2.c
 
 run:
 	./a.out

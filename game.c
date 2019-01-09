@@ -94,7 +94,7 @@ int get_piece_position(char * input, char * board) {
   return pos;
 }
 
-int check_opponents(char * piece, char * board) {
+int check_opponents(int piece_loc, char * board) {
   int piece_index = get_piece_position(piece, board);
   //top left
   if (piece_index - 9 != '-' && board[piece_index - 9] != board[piece_index])
@@ -119,10 +119,10 @@ int is_viable_move(char * piece, char * move, char * board) {
 
   if(board[piece_index] == 'x') { // board piece is white
     // move diagonally
-    if (check_opponents(piece, board))
+    while (check_opponents(piece, board)) {
       printf("found an opponent destrOY!");
 
-
+    }
 
     if(piece_index + 7 == move_index || piece_index + 9 == move_index) {
       return 1;
@@ -150,6 +150,20 @@ int is_viable_move(char * piece, char * move, char * board) {
     }
   }
   return 0;
+}
+
+int jump(int piece, int direction, char * board) {
+  char selected_piece;
+  int selected_piece_index;
+  int * movement = [7, 9, -7, -9];
+
+  selected_piece_index = get_piece_position(user_piece, board);
+  board[selected_piece_index+ movement[direction - 1]] = '-';
+  board[get_piece_position(user_move, board)] = selected_piece;
+  board[get_piece_position(user_piece, board)] = '-';
+
+
+  return;
 }
 
 int main(int argc, char const *argv[]) {
@@ -223,6 +237,20 @@ int main(int argc, char const *argv[]) {
           user_piece[strlen(user_piece)-1] = '\0';
           selected_piece = board[get_piece_position(user_piece, board)];
           if(selected_piece == 'x') {
+            /**
+            int direction = check_opponents(piece, board);
+            int * moves = [0, 7 ,9];
+            while (direction) {
+              printf("found an opponent destrOY!");
+
+            }
+            **/
+            for (int i = 64; ;i--) {
+              int x = check_opponents(i, board);
+              if (x != 0)
+              break;
+            }
+
             printf("Select where to move it [row][column]: \n");
             fgets(user_move, 4, stdin);
             user_move[strlen(user_move)-1] = '\0';
@@ -234,10 +262,14 @@ int main(int argc, char const *argv[]) {
             }
             else if(is_viable_move(user_piece, user_move, board) == 2) {
               // then the piece jumped left
+              jump();
+              /**
+              while (check_opponents(user_piece, board) > 2)
               selected_piece_index = get_piece_position(user_piece, board);
               board[selected_piece_index+7] = '-';
               board[get_piece_position(user_move, board)] = selected_piece;
               board[get_piece_position(user_piece, board)] = '-';
+              **/
               num_red --;
 
               break;
