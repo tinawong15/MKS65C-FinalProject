@@ -245,16 +245,28 @@ int main(int argc, char const *argv[]) {
     while(is_ongoing) {
       if(turn == 1) {
         printf("White's turn\n");
+        //Add King function
         // First checks if there are any jumps possible, starting from the bottom most part of the board.
         int x, i;
         printf("Starting search for jumps\n");
         for (i = 63; i >= 0 ;i--) {
           if (board[i] == 'x') {
             x = check_opponents(i, board);
-            if (x){
-              printf("%d\n",i);
-              printf("found an enemy piece\n");
+            while (x == 3 || x == 4) {
+
+              int new = jump('x', i, x, board);
+              num_red --;
+              display(board);
+              x = check_opponents(new, board);
+              //printf("%d\n",i);
+              printf("found an enemy piece i'm White \n");
               break;
+              if (!x){
+                printf("No more jumps available");
+                turn = 1;
+                break;
+              }
+
             }
           }
         }
@@ -285,8 +297,8 @@ int main(int argc, char const *argv[]) {
             }
           }
         }
-
-        if (x == 2 || x == 3 ) {
+        /**
+        if (x == 3 || x == 4 ) {
 
           printf("x : %d\n", x);
           printf("Ya jumping now.");
@@ -296,33 +308,44 @@ int main(int argc, char const *argv[]) {
           display(board);
           x = check_opponents(new, board);
           printf("after checking opponents: %d\n", x);
-          /**
+
           if (!x){
             printf("No more jumps available");
             turn = 1;
             break;
           }
-          **/
+
           //break;
 
         }
-
+        **/
         turn = 2;
       }
 
       else {
         printf("Red's turn.\n");
-
+        // Add: King function
         // First checks if there are any jumps possible, starting from the upper most part of the board.
         int x, i;
         printf("Starting search for jumps\n");
         for (i = 0; i < 64 ;i++) {
           if (board[i] == 'o') {
             x = check_opponents(i, board);
-            if (x){
-              printf("%d\n",i);
-              printf("found an enemy piece\n");
+            while (x == 1 || x == 2) {
+
+              int new = jump('o', i, x, board);
+              num_white --;
+              display(board);
+              x = check_opponents(new, board);
+              //printf("%d\n",i);
+              printf("found an enemy piece i'm red\n");
               break;
+              if (!x){
+                printf("No more jumps available");
+                turn = 1;
+                break;
+              }
+
             }
           }
         }
@@ -352,6 +375,7 @@ int main(int argc, char const *argv[]) {
           }
         }
       }
+      /**
         if (x == 1 || x == 2) {
           printf("x : %d\n", x);
           printf("Ya jumping now.");
@@ -361,15 +385,16 @@ int main(int argc, char const *argv[]) {
           display(board);
           x = check_opponents(new, board);
           printf("after checking opponents: %d\n", x);
-          /**
+
           if (!x){
             printf("No more jumps available");
             turn = 1;
             break;
           }
-          **/
+
           //break;
         }
+        **/
         turn = 1;
       }
       amount_of_moves++;
