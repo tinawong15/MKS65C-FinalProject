@@ -32,15 +32,15 @@ int server_handshake(int *to_client) {
   }
   // child server
   else {
-    printf("Write back to Client...\n");
+    printf("[subserver] Write back to Client...\n");
     *to_client = open(message, O_WRONLY);
     write(*to_client, ACK, sizeof(ACK));
 
-    printf("Wait for Client...\n");
-    printf("Private pipe opened: %d\n", fd);
+    printf("[subserver] Wait for Client...\n");
+    printf("[subserver] Private pipe opened: %d\n", fd);
     char response[HANDSHAKE_BUFFER_SIZE];
     read(fd, response, sizeof(response));
-    printf("Response from the Client: %s\n", response);
+    printf("[subserver] Response from the Client: %s\n", response);
 
     return fd;
   }

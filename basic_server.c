@@ -3,9 +3,9 @@
 
 static void sighandler(int signo){
   if(signo == SIGINT){
-    printf("Removing well known pipe...\n");
+    // printf("Removing well known pipe...\n");
     remove("server");
-    printf("Server is exiting...\n");
+    printf("[server] Server is exiting...\n");
     exit(0);
   }
 }
@@ -16,24 +16,30 @@ int main() {
   int to_client;
   int from_client;
   char msg[BUFFER_SIZE];
-  int i;
+  int i = 1;
 
+  char * board = init_board();
   while(1) {
     from_client = server_handshake( &to_client );
-    write(to_client, "[server] Welcome to the Checkers game! Do you want to start playing? [y/n]", BUFFER_SIZE);
-    read(from_client, msg, BUFFER_SIZE);
-    char * board = init_board();
     if(from_client) {
+      write(to_client, "[server] Welcome to the Checkers game!", BUFFER_SIZE);
       while(read(from_client, msg, BUFFER_SIZE)) {
-        printf("[server] Server received: %s\n", msg);
-        for(i = 0; i < strlen(msg); i++) {
-          msg[i] += 1;
-        }
-        write(to_client, msg, BUFFER_SIZE);
-        printf("[server] Server sent: %s\n", msg);
+        display(board);
+        write(to_client, board, BUFFER_SIZE);
       }
       printf("[server] Client disconnected. Time for a new handshake!\n");
     }
+    // if(from_client) {
+    //   while(read(from_client, msg, BUFFER_SIZE)) {
+    //     printf("[server] Server received: %s\n", msg);
+    //     for(i = 0; i < strlen(msg); i++) {
+    //       msg[i] += 1;
+    //     }
+    //     write(to_client, msg, BUFFER_SIZE);
+    //     printf("[server] Server sent: %s\n", msg);
+    //   }
+    //   printf("[server] Client disconnected. Time for a new handshake!\n");
+    // }
   }
   return 0;
 }

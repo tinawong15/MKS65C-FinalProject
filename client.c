@@ -17,15 +17,25 @@ int main() {
 
   from_server = client_handshake( &to_server );
 
-  while(1) {
-    printf("[client] User input to server: ");
-    fgets(msg, BUFFER_SIZE, stdin);
-    msg[strlen(msg)-1] = '\0';
-    printf("[client] Client sent: %s\n", msg);
+  printf("[client] ");
+  fgets(msg, BUFFER_SIZE, stdin);
+  msg[strlen(msg)-1] = '\0';
 
-    write(to_server, msg, BUFFER_SIZE);
-    read(from_server, msg, BUFFER_SIZE);
-    printf("%s\n", msg);
+  write(to_server, msg, BUFFER_SIZE);
+
+  int i = 1;
+  while(1) {
+    if(i == 1) {
+      read(from_server, msg, BUFFER_SIZE);
+      i = 0;
+    }
+    else {
+      read(from_server, msg, BUFFER_SIZE);
+      char * user_board = msg;
+      // printf("%s\n", user_board);
+      display(user_board);
+      play(user_board);
+    }
   }
   return 0;
 }
