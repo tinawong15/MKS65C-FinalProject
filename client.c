@@ -22,20 +22,13 @@ int main() {
   msg[strlen(msg)-1] = '\0';
 
   write(to_server, msg, BUFFER_SIZE);
-
-  int i = 1;
+  printf("%s\n", "Welcome to the Checkers game!");
   while(1) {
-    if(i == 1) {
-      read(from_server, msg, BUFFER_SIZE);
-      i = 0;
-    }
-    else {
-      read(from_server, msg, BUFFER_SIZE);
-      char * user_board = msg;
-      // printf("%s\n", user_board);
-      display(user_board);
-      play(user_board);
-    }
+    read(from_server, msg, BUFFER_SIZE);
+    char * user_board = msg;
+    // printf("%s\n", user_board);
+    display(user_board);
+    play(user_board);
   }
   return 0;
 }

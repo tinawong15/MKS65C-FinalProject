@@ -5,7 +5,7 @@ static void sighandler(int signo){
   if(signo == SIGINT){
     // printf("Removing well known pipe...\n");
     remove("server");
-    printf("[server] Server is exiting...\n");
+    // printf("[server] Server is exiting...\n");
     exit(0);
   }
 }
@@ -22,7 +22,6 @@ int main() {
   while(1) {
     from_client = server_handshake( &to_client );
     if(from_client) {
-      write(to_client, "[server] Welcome to the Checkers game!", BUFFER_SIZE);
       while(read(from_client, msg, BUFFER_SIZE)) {
         display(board);
         write(to_client, board, BUFFER_SIZE);
