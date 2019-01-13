@@ -179,9 +179,8 @@ int jump(char piece, int piece_loc, int direction, char * board) {
   return piece_loc + movement[direction - 1] * 2;
 }
 
-int main(int argc, char const *argv[]) {
-  char board[64];
-  int is_ongoing = 1;
+char * init_board() {
+  char * board = calloc(65, sizeof(char));
 
   // initialize checkers board
   int pos;
@@ -224,9 +223,12 @@ int main(int argc, char const *argv[]) {
       }
     }
   }
+  return board;
+}
 
+void play(char * board) {
   char start[3];
-
+  int is_ongoing = 1;
   char user_piece[4];
   char user_move[4];
   char selected_piece;
@@ -417,5 +419,11 @@ int main(int argc, char const *argv[]) {
     exit(0);
   }
 
-  return 0;
+  // return 0;
+}
+
+char * help() {
+  char * pls = calloc(256, sizeof(char));
+  pls = "help";
+  return pls;
 }

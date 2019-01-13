@@ -1,4 +1,5 @@
 #include "pipe_networking.h"
+# include "game.h"
 
 static void sighandler(int signo){
   if(signo == SIGINT){
@@ -17,14 +18,14 @@ int main() {
   from_server = client_handshake( &to_server );
 
   while(1) {
-    printf("User input to server: ");
+    printf("[client] User input to server: ");
     fgets(msg, BUFFER_SIZE, stdin);
     msg[strlen(msg)-1] = '\0';
-    printf("Client sent: %s\n", msg);
+    printf("[client] Client sent: %s\n", msg);
 
     write(to_server, msg, BUFFER_SIZE);
     read(from_server, msg, BUFFER_SIZE);
-    printf("Client received: %s\n", msg);
+    printf("%s\n", msg);
   }
   return 0;
 }

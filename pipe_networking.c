@@ -74,7 +74,7 @@ int client_handshake(int *to_server) {
   printf("Message from the Server: %s\n", message);
   remove("private");
 
-  printf("Write to Server to Acknowledge...\n");
+  printf("Write to server to acknowledge that you are connected...\n");
   write(*to_server, ACK, sizeof(ACK));
   return fd;
 }
