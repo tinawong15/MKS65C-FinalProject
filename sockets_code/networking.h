@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <string.h>
+#include <signal.h>
 #include <errno.h>
 
 #ifndef NETWORKING_H
