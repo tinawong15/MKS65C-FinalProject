@@ -35,10 +35,10 @@ int main() {
     printf("Waiting for players to connect...\n");
     int client_socket = server_connect(listen_socket);
 
-    strcpy(buffer, "Please type your name.");
+    strcpy(buffer, "[server] Please type your name.");
     write(client_socket, buffer, sizeof(buffer));
 
-    write(client_socket, "y", sizeof("y"));
+    write(client_socket, "1", sizeof("1"));
 
     read(client_socket, buffer, sizeof(buffer));
 
@@ -60,7 +60,7 @@ int main() {
 
       for(i = 0; i < total_players; i++) {
         write(clients[i].client_socket, msg, sizeof(msg));
-        write(clients[i].client_socket, "y", sizeof("y"));
+        write(clients[i].client_socket, "1", sizeof("1"));
         read(clients[i].client_socket, buffer, sizeof(buffer));
 
         if(!strcmp(buffer, "y")) {
@@ -82,6 +82,8 @@ int main() {
   }
 
   to_all_clients(clients, total_players, "\nWelcome to Checkers!\n");
+  write(clients[i].client_socket, "0", sizeof("0"));
+  
   char board[65];
   strcpy(board, init_board());
   // printf("%s\n", board);

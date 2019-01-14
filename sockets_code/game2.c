@@ -20,7 +20,7 @@ X/O is kinged
 
 int play_game(struct client clients[], int num_players, char * board) {
   int i;
-  char user_board[65];
+  char user_board[BUFFER_SIZE];
   strcpy(user_board, board);
   // strcpy(buffer, msg);
   int turn = 1;
@@ -28,16 +28,17 @@ int play_game(struct client clients[], int num_players, char * board) {
   // while(is_ongoing) {
     for (i = 0; i < num_players; i++){
       if(clients[i].team == turn && turn == 1) {
-        printf("%s\n", user_board);
-        write(clients[i].client_socket, "-x-x-x-xx-x-x-x--x-x-x-x----------------o-o-o-o--o-o-o-oo-o-o-o-", sizeof(65));
-        // strcpy(board, client_game(board));
+        printf("server: %s\n", user_board);
+        write(clients[i].client_socket, user_board, sizeof(BUFFER_SIZE));
+        write(clients[i].client_socket, "0", sizeof("0"));
         turn = 2;
       }
     }
     for (i = 0; i < num_players; i++){
       if(clients[i].team == turn && turn == 2) {
-        printf("%s\n", user_board);
-        write(clients[i].client_socket, user_board, sizeof(65));
+        // printf("%s\n", user_board);
+        write(clients[i].client_socket, user_board, sizeof(BUFFER_SIZE));
+        write(clients[i].client_socket, "0", sizeof("0"));
         // strcpy(board, client_game(board));
         turn = 1;
       }

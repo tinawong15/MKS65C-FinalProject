@@ -6,7 +6,7 @@ int should_respond(int server_socket){
    char buffer[BUFFER_SIZE];
    read(server_socket, buffer, sizeof(buffer));
 
-   if(strcmp(buffer, "y") == 0){
+   if(strcmp(buffer, "1") == 0){
      return 1;
    }
    else {
@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 
   int server_socket;
   char buffer[BUFFER_SIZE];
-  char user_board[65];
+  char user_board[BUFFER_SIZE];
   strcpy(user_board, init_board());
   printf("%s\n", user_board);
   if (argc == 2)
@@ -28,13 +28,12 @@ int main(int argc, char **argv) {
 
   int i = 0;
   while (read(server_socket, buffer, sizeof(buffer))) {
-    if(i < 3) {
-      printf("%s\n", buffer);
+    if(buffer[0] != '-') {
+      printf("%s \n", buffer);
       i++;
     }
     else {
       // strcpy(user_board, buffer);
-      printf("%s\n", user_board);
       display(user_board);
     }
     if(should_respond(server_socket)) {
