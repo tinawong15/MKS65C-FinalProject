@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -12,7 +13,7 @@
 #ifndef NETWORKING_H
 #define NETWORKING_H
 
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 1024
 #define PORT "9001"
 #define TEST_IP "127.0.0.1"
 

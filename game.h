@@ -19,5 +19,3 @@ int is_viable_move(char * piece, char * move, char * board);
 char * init_board();
 
 void play(char * board);
-
-char * help();

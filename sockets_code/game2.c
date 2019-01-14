@@ -17,6 +17,41 @@ X/O is kinged
 
 50 moves without a capture/kinging is a draw
 **/
+
+int play_game(struct client clients[], int num_players, char * board) {
+  int i;
+  char user_board[65];
+  strcpy(user_board, board);
+  // strcpy(buffer, msg);
+  int turn = 1;
+  int is_ongoing = 1;
+  // while(is_ongoing) {
+    for (i = 0; i < num_players; i++){
+      if(clients[i].team == turn && turn == 1) {
+        printf("%s\n", user_board);
+        write(clients[i].client_socket, "-x-x-x-xx-x-x-x--x-x-x-x----------------o-o-o-o--o-o-o-oo-o-o-o-", sizeof(65));
+        // strcpy(board, client_game(board));
+        turn = 2;
+      }
+    }
+    for (i = 0; i < num_players; i++){
+      if(clients[i].team == turn && turn == 2) {
+        printf("%s\n", user_board);
+        write(clients[i].client_socket, user_board, sizeof(65));
+        // strcpy(board, client_game(board));
+        turn = 1;
+      }
+    }
+    is_ongoing = 0;
+  // }
+  return 0;
+}
+
+char * client_game(char * board) {
+  display(board);
+  return board;
+}
+
 void display(char * board) {
   printf("\n   h  g  f  e  d  c  b  a\n1");
   int i;
@@ -41,6 +76,7 @@ void display(char * board) {
   }
   printf("\n");
 }
+
 int get_piece_position(char * input, char * board) {
   int column;
   if(input[0] == '1') {
