@@ -75,6 +75,9 @@ int main(int argc, char **argv) {
           display(user_board);
           break;
         }
+        else if(buffer[0] == '-') {
+          strcpy(user_board, buffer);
+        }
         else {
           printf("%s", buffer);
           break;

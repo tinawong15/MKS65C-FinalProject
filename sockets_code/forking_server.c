@@ -1,5 +1,6 @@
 #include "networking.h"
 #include "game.h"
+
 int total_players;
 // void process(char *s);
 // void subserver(int from_client);
@@ -110,6 +111,8 @@ int main() {
   int selected_piece_index;
   char buffer[4];
   char buffer2[BUFFER_SIZE];
+  char buffer3[BUFFER_SIZE];
+  char buffer4[BUFFER_SIZE];
   int amount_of_moves = 0;
   int num_white = 12;
   int num_red = 12;
@@ -128,6 +131,8 @@ int main() {
       to_all_clients(clients, total_players, "White's turn.\n");
       //Add King function
       // First checks if there are any jumps possible, starting from the bottom most part of the board.
+      // printf("%s\n", "not jumping?");
+      // display(board);
       int x, a;
       printf("Starting search for jumps\n");
       for (a = 63; a >= 0 ;a--) {
@@ -176,19 +181,22 @@ int main() {
               break;
             }
             else {
-              strcpy(msg, "You cannot move here. Try again.\n");
-              write(clients[i].client_socket, msg, sizeof(msg));
+              strcpy(buffer4, "You cannot move here. Try again.\n");
+              // printf("%s\n", buffer4);
+              write(clients[1].client_socket, buffer4, sizeof(buffer4));
             }
 
           }
           else {
-            strcpy(msg, "You cannot move this piece. Try again.\n");
-            write(clients[i].client_socket, msg, sizeof(msg));
+            strcpy(buffer4, "You cannot move this piece. Try again.\n");
+            write(clients[1].client_socket, buffer4, sizeof(buffer4));
           }
 
         }
+        display(board);
         turn = 2;
-
+        strcpy(buffer3, board);
+        write(clients[0].client_socket, buffer3, sizeof(buffer3));
       }
       /**
       if (x == 3 || x == 4 ) {
@@ -215,7 +223,9 @@ int main() {
     }
 
     else {
-      printf("Red's turn.\n");
+      to_all_clients(clients, total_players, "Red's turn.\n");
+      // printf("%s\n", "not jumping?");
+      // display(board);
       // Add: King function
       // First checks if there are any jumps possible, starting from the upper most part of the board.
       int x, b;
@@ -257,7 +267,7 @@ int main() {
             printf("start reading\n");
             read(clients[0].client_socket, buffer2, sizeof(buffer2));            printf("done reading\n");
             printf(" user input:%s\n", buffer2);
-            strcpy(user_move, buffer);
+            strcpy(user_move, buffer2);
             printf("user input:%s\n", user_move);
             if(is_viable_move(user_piece, user_move, board) == 1) {
               // moved diagonally
@@ -266,12 +276,14 @@ int main() {
               break;
             }
             else {
-              printf("You cannot move here. Try again.\n");
+              strcpy(buffer4, "You cannot move here. Try again.\n");
+              write(clients[0].client_socket, buffer4, sizeof(buffer4));
             }
           }
           else {
-            printf("You cannot move this piece. Try again.\n");
-            }
+            strcpy(buffer4, "You cannot move this piece. Try again.\n");
+            write(clients[0].client_socket, buffer4, sizeof(buffer4));
+          }
         }
       }
       /**
@@ -294,8 +306,13 @@ int main() {
           //break;
         }
         **/
+        display(board);
         turn = 1;
-      }
+        strcpy(buffer3, board);
+        display(buffer3);
+        write(clients[1].client_socket, buffer3, sizeof(buffer3));
+
+    }
       amount_of_moves++;
       if(amount_of_moves == 50) {
         //strcpy(msg, "50 moves have been reached. Game is a draw.\n");
