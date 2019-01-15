@@ -13,6 +13,36 @@ pd 10
 ==============================================================
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-tinaW -- 2019-01-13 01:36
+tinaW -- 2019-01-06 20:20
+- Added basic checkers game without server/client (allows piece to move diagonally and jump)
+- Displays board in terminal
+- Checks if user inputted a valid move/piece
+
+maggieZ -- 2019-01-08 12:30
+- Added automatic jump functionality
+
+tinaW -- 2019-01-09 01:36
 - Fixed makefile to include game
 - Started server client connection
+
+tinaW -- 2019-01-10 01:10
+- Added sockets code
+- Started combining sockets with current code
+
+tinaW -- 2019-01-11 01:10
+- Added prompting for client to enter their name and join server
+- Allow multiple users to join
+
+tinaW, maggieZ -- 2019-01-12 15:35
+- Starts game when all clients are connected
+
+tinaW, maggieZ -- 2019-01-13 18:35
+- Added turns
+- Displays board when it is the user's turn
+
+maggieZ -- 2019-01-14 02:24
+- Merged basic checkers game with the server/client connection
+
+tinaW -- 2019-01-14 22:45
+- Passes board from client to server
+- Updates board each time board is passed
