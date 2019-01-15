@@ -239,9 +239,9 @@ int main() {
       if (!x) {
         while(1) {
           write(clients[0].client_socket, "3", sizeof("3"));
-          read(clients[0].client_socket, buffer, sizeof(buffer));
-          printf(" user input:%s\n", buffer);
-          strcpy(user_piece, buffer);
+          read(clients[0].client_socket, buffer2, sizeof(buffer2));
+          printf(" user input:%s\n", buffer2);
+          strcpy(user_piece, buffer2);
           //printf("Red checkers turn! There are no jumps available, so select a piece to move [row][column]: \n");
           //fgets(user_piece, 4, stdin);
           //user_piece[strlen(user_piece)-1] = '\0';
@@ -255,8 +255,8 @@ int main() {
             //user_move[strlen(user_move)-1] = '\0';
             write(clients[0].client_socket, "4", sizeof("4"));
             printf("start reading\n");
-            read(clients[0].client_socket, buffer, sizeof(buffer));            printf("done reading\n");
-            printf(" user input:%s\n", buffer);
+            read(clients[0].client_socket, buffer2, sizeof(buffer2));            printf("done reading\n");
+            printf(" user input:%s\n", buffer2);
             strcpy(user_move, buffer);
             printf("user input:%s\n", user_move);
             if(is_viable_move(user_piece, user_move, board) == 1) {
