@@ -29,3 +29,4 @@ $ ./client
 ## Known Bugs
 - Once the client joins the server, you can only say yes to continuing the game. You can say no, but the server does not know that the player has left and will continue the game regardless.
 - If you are inputting more than 4 letters when the user is prompted for a move or a piece, the game will break.
+- Regular checkers can kill king checkers.
