@@ -9,16 +9,19 @@ The project is a multi-player checkers game. Along with the basic checkers game 
 For our minimum viable product, multiple users will be allowed to join the server. Once everyone has joined, the game will begin; the server splits up the users into two even(ish) teams—one team for the red checkers, and one for the white.
 
 ## Instructions to Run
-1. Compile code.
+1. Go to repo.
+```
+cd MKS65C-FinalProject/sockets_code
+```
+2. Compile code.
 ```
 $ make
 ```
-
-2. Run server.
+3. Run server.
 ```
 $ ./server
 ```
-3. Run client.
+4. Run client.
 ```
 $ ./client
 ```
