@@ -37,12 +37,12 @@ int main(int argc, char **argv) {
   char user_piece[4];
   char user_move[4];
   strcpy(user_board, init_board());
-  printf("%s\n", user_board);
+  // printf("%s\n", user_board);
 
   while (1) {
     //printf("Waiting for your turn...\n");
     while(read(server_socket, buffer, sizeof(buffer))) {
-      printf("received: [%s]\n", buffer);
+      // printf("received: [%s]\n", buffer);
         if(strcmp(buffer, "1") == 0) {
           printf("[client] ");
           fgets(buffer, sizeof(buffer), stdin);
@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
         }
         else if (strcmp(buffer, "3") == 0) {
           display(user_board);
-          printf("It's your turn! There are no jumps available, so select a piece to move [row][column]: \n");
+          printf("It's your turn! Select a piece to move [row][column]: \n");
           printf("[client] ");
           fgets(buffer, sizeof(buffer), stdin);
           buffer[strlen(buffer)-1] = '\0';
@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
           printf("Select where to move it [row][column]: \n");
           printf("[client] ");
           fgets(buffer, sizeof(buffer), stdin);
-          printf("%s\n", buffer);
+          // printf("%s\n", buffer);
           buffer[strlen(buffer)-1] = '\0';
           write(server_socket, buffer, sizeof(buffer));
         }
@@ -77,6 +77,9 @@ int main(int argc, char **argv) {
         }
         else if(buffer[0] == '-') {
           strcpy(user_board, buffer);
+        }
+        else if (strcmp(buffer, "exit") == 0) {
+          exit(0);
         }
         else {
           printf("%s", buffer);

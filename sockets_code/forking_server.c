@@ -35,7 +35,7 @@ int main() {
     printf("Waiting for players to connect...\n");
     int client_socket = server_connect(listen_socket);
 
-    strcpy(buffer1, "[server] Please type your name.");
+    strcpy(buffer1, "[server] Please type your name.\n");
     //write(client_socket, buffer1, sizeof(buffer1));
     write(client_socket, buffer1, sizeof(buffer1));
     write(client_socket, "1", sizeof("1"));
@@ -55,7 +55,7 @@ int main() {
       strcpy(msg, "\n");
       sprintf(total, "%d", total_players);
       strcat(msg, total);
-      strcat(msg, " players have joined the game. Continue? (y/n)?");
+      strcat(msg, " players have joined the game. Continue? (y/n)?\n");
       joined = 0;
 
       for(i = 0; i < total_players; i++) {
@@ -405,7 +405,7 @@ int main() {
             //fgets(user_move, 4, stdin);
             //user_move[strlen(user_move)-1] = '\0';
             write(clients[0].client_socket, "4", sizeof("4"));
-            printf("start reading\n");
+            // printf("start reading\n");
             read(clients[0].client_socket, buffer2, sizeof(buffer2));            printf("done reading\n");
             printf(" user input:%s\n", buffer2);
             strcpy(user_move, buffer2);
@@ -493,19 +493,22 @@ int main() {
       if(amount_of_moves == 50) {
         //strcpy(msg, "50 moves have been reached. Game is a draw.\n");
         to_all_clients(clients, total_players, "50 moves have been reached. Game is a draw.\n");
-
+        write(clients[0].client_socket, "exit", sizeof("exit"));
+        write(clients[1].client_socket, "exit", sizeof("exit"));
         is_ongoing = 0;
       }
       if (num_white == 0) {
         printf("All white pieces have been taken. Red team wins. \n");
         to_all_clients(clients, total_players, "All white pieces have been taken. Red team wins. \n");
-
+        write(clients[0].client_socket, "exit", sizeof("exit"));
+        write(clients[1].client_socket, "exit", sizeof("exit"));
         is_ongoing = 0;
       }
       if (num_red == 0) {
         printf("All red pieces have been taken. White team wins. \n");
         to_all_clients(clients, total_players, "All red pieces have been taken. White team wins. \n");
-
+        write(clients[0].client_socket, "exit", sizeof("exit"));
+        write(clients[1].client_socket, "exit", sizeof("exit"));
         is_ongoing = 0;
       }
       display(board);
