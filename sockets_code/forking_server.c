@@ -137,8 +137,11 @@ int main() {
       printf("Starting search for jumps\n");
       for (a = 63; a >= 0 ;a--) {
         if (board[a] == 'x') {
+          printf("looking at %d\n", a);
           x = check_opponents(i, board);
-          while (x == 3 || x == 4) {
+          printf("looking for opponents");
+          printf("%d\n", x);
+          if (x == 3 || x == 4) {
             int new = jump('x', a, x, board);
             num_red --;
             display(board);
@@ -176,8 +179,96 @@ int main() {
             printf("user input:%s\n", user_move);
             if(is_viable_move(user_piece, user_move, board) == 1) {
             // moved diagonally
+              if (get_piece_position(user_move, board) >56 )
+                board[get_piece_position(user_move, board)] = 'X';
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';\
+
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 2) {
+            // then the piece jumped right
+              selected_piece_index = get_piece_position(user_piece, board);
+              board[selected_piece_index+7] = '-';
+              if (get_piece_position(user_move, board) >56 )
+                board[get_piece_position(user_move, board)] = 'X';
+              else
+                board[get_piece_position(user_move, board)] = selected_piece;
+
+              board[get_piece_position(user_piece, board)] = '-';
+              num_red--;
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 3) {
+              // then the piece jumped left
+              selected_piece_index = get_piece_position(user_piece, board);
+              board[selected_piece_index+9] = '-';
+              if (get_piece_position(user_move, board) > 55 )
+                board[get_piece_position(user_move, board)] = 'X';
+              else
+                board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              num_red--;
+              break;
+            }
+            else {
+              strcpy(buffer4, "You cannot move here. Try again.\n");
+              // printf("%s\n", buffer4);
+              write(clients[1].client_socket, buffer4, sizeof(buffer4));
+            }
+
+          }
+          else if(selected_piece == 'X') {
+            printf("Select where to move it [row][column]: \n");
+            //fgets(user_move, 4, stdin);
+            write(clients[1].client_socket, "4", sizeof("4"));
+            printf("start reading\n");
+            read(clients[1].client_socket, buffer2, sizeof(buffer2));
+            printf("done reading\n");
+            printf(" user input:%s\n", buffer2);
+            strcpy(user_move, buffer2);
+            printf("user input:%s\n", user_move);
+            if(is_viable_move(user_piece, user_move, board) == 1) {
+            // moved diagonally
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';\
+
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 2) {
+            // then the piece jumped right
+              selected_piece_index = get_piece_position(user_piece, board);
+              board[selected_piece_index+7] = '-';
+              board[get_piece_position(user_move, board)] = selected_piece;
+
+              board[get_piece_position(user_piece, board)] = '-';
+              num_red--;
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 3) {
+              // then the piece jumped left
+              selected_piece_index = get_piece_position(user_piece, board);
+              board[selected_piece_index+9] = '-';
               board[get_piece_position(user_move, board)] = selected_piece;
               board[get_piece_position(user_piece, board)] = '-';
+              num_red--;
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 4) {
+              // then the piece jumped backwards
+              selected_piece_index = get_piece_position(user_piece, board);
+              board[selected_piece_index-8] = '-';
+
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              num_red--;
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 5) {
+              // then the piece jumped backwards
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';\
+
               break;
             }
             else {
@@ -233,7 +324,10 @@ int main() {
       for (b = 0; b < 64 ;b++) {
         if (board[b] == 'o') {
           x = check_opponents(i, board);
-          while (x == 1 || x == 2) {
+          printf("looking for opponents");
+          printf("%d\n", x);
+
+          if (x == 1 || x == 2) {
 
             int new = jump('o', b, x, board);
             num_white --;
@@ -271,8 +365,90 @@ int main() {
             printf("user input:%s\n", user_move);
             if(is_viable_move(user_piece, user_move, board) == 1) {
               // moved diagonally
+              if (get_piece_position(user_move, board) < 8 )
+                board[get_piece_position(user_move, board)] = 'O';
               board[get_piece_position(user_move, board)] = selected_piece;
               board[get_piece_position(user_piece, board)] = '-';
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 2) {
+            // then the piece jumped right
+            selected_piece_index = get_piece_position(user_piece, board);
+            board[selected_piece_index-7] = '-';
+            if (get_piece_position(user_move, board) < 8 )
+              board[get_piece_position(user_move, board)] = 'O';
+            else
+              board[get_piece_position(user_move, board)] = selected_piece;
+            board[get_piece_position(user_piece, board)] = '-';
+            num_white--;
+            break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 3) {
+              // then the piece jumped left
+              selected_piece_index = get_piece_position(user_piece, board);
+              board[selected_piece_index-9] = '-';
+              if (get_piece_position(user_move, board) < 8 )
+                board[get_piece_position(user_move, board)] = 'O';
+              else
+                board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              num_white--;
+              break;
+            }
+            else {
+              strcpy(buffer4, "You cannot move here. Try again.\n");
+              write(clients[0].client_socket, buffer4, sizeof(buffer4));
+            }
+          }
+          else if(selected_piece == 'O') {
+            //printf("Select where to move it [row][column]: \n");
+            //fgets(user_move, 4, stdin);
+            //user_move[strlen(user_move)-1] = '\0';
+            write(clients[0].client_socket, "4", sizeof("4"));
+            printf("start reading\n");
+            read(clients[0].client_socket, buffer2, sizeof(buffer2));            printf("done reading\n");
+            printf(" user input:%s\n", buffer2);
+            strcpy(user_move, buffer2);
+            printf("user input:%s\n", user_move);
+            if(is_viable_move(user_piece, user_move, board) == 1) {
+              // moved diagonally
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 2) {
+            // then the piece jumped right
+            selected_piece_index = get_piece_position(user_piece, board);
+            board[selected_piece_index-7] = '-';
+
+            board[get_piece_position(user_move, board)] = selected_piece;
+            board[get_piece_position(user_piece, board)] = '-';
+            num_white--;
+            break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 3) {
+              // then the piece jumped left
+              selected_piece_index = get_piece_position(user_piece, board);
+              board[selected_piece_index-9] = '-';
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              num_white--;
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 4) {
+              // then the piece jumped left
+              selected_piece_index = get_piece_position(user_piece, board);
+              board[selected_piece_index+8] = '-';
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              num_white--;
+              break;
+            }
+            else if(is_viable_move(user_piece, user_move, board) == 5) {
+              // then the piece jumped backwards
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';\
+
               break;
             }
             else {

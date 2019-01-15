@@ -207,8 +207,20 @@ int is_viable_move(char * piece, char * move, char * board) {
     else if (board[piece_index+7] == 'o' && piece_index + 14 == move_index && board[move_index] == '-') {
       return 2;
     }
+    else if (board[piece_index+7] == 'O' && piece_index + 14 == move_index && board[move_index] == '-') {
+      return 2;
+    }
     else if (board[piece_index+9] == 'o' && piece_index + 18 == move_index && board[move_index] == '-') {
       return 3;
+    }
+    else if (board[piece_index+9] == 'O' && piece_index + 18 == move_index && board[move_index] == '-') {
+      return 3;
+    }
+    else if (board[piece_index-8] == 'o' && piece_index - 16 == move_index && board[move_index] == '-') {
+      return 4;
+    }
+    else if (board[piece_index-8] == 'O' && piece_index - 16 == move_index &&   board[move_index] == '-') {
+      return 4;
     }
   }
   else { // board piece is an 'o' (red)
@@ -222,6 +234,9 @@ int is_viable_move(char * piece, char * move, char * board) {
     }
     else if (board[piece_index-9] == 'x' && piece_index - 18 == move_index && board[move_index] == '-') {
       return 3;
+    }
+    else if (board[piece_index+8] == 'x' && piece_index + 16 == move_index && board[move_index] == '-') {
+      return 4;
     }
   }
   return 0;
