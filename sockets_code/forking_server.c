@@ -216,14 +216,14 @@ int main() {
       printf("Red's turn.\n");
       // Add: King function
       // First checks if there are any jumps possible, starting from the upper most part of the board.
-      int x, i;
+      int x, b;
       printf("Starting search for jumps\n");
-      for (i = 0; i < 64 ;i++) {
-        if (board[i] == 'o') {
+      for (b = 0; b < 64 ;b++) {
+        if (board[b] == 'o') {
           x = check_opponents(i, board);
           while (x == 1 || x == 2) {
 
-            int new = jump('o', i, x, board);
+            int new = jump('o', b, x, board);
             num_white --;
             display(board);
             x = check_opponents(new, board);
@@ -236,27 +236,40 @@ int main() {
       printf("Ended search for jumps\n");
       if (!x) {
         while(1) {
-        printf("Red checkers turn! There are no jumps available, so select a piece to move [row][column]: \n");
-        fgets(user_piece, 4, stdin);
-        user_piece[strlen(user_piece)-1] = '\0';
-        selected_piece = board[get_piece_position(user_piece, board)];
-        if(selected_piece == 'o') {
-          printf("Select where to move it [row][column]: \n");
-          fgets(user_move, 4, stdin);
-          user_move[strlen(user_move)-1] = '\0';
-          if(is_viable_move(user_piece, user_move, board) == 1) {
-            // moved diagonally
-            board[get_piece_position(user_move, board)] = selected_piece;
-            board[get_piece_position(user_piece, board)] = '-';
-            break;
+          write(clients[0].client_socket, "3", sizeof("3"));
+          read(clients[0].client_socket, buffer, sizeof(buffer));
+          printf(" user input:%s\n", buffer);
+          strcpy(user_piece, buffer);
+          //printf("Red checkers turn! There are no jumps available, so select a piece to move [row][column]: \n");
+          //fgets(user_piece, 4, stdin);
+          //user_piece[strlen(user_piece)-1] = '\0';
+
+          selected_piece = board[get_piece_position(user_piece, board)];
+          printf("%c\n", selected_piece);
+
+          if(selected_piece == 'o') {
+            //printf("Select where to move it [row][column]: \n");
+            //fgets(user_move, 4, stdin);
+            //user_move[strlen(user_move)-1] = '\0';
+            write(clients[0].client_socket, "4", sizeof("4"));
+            printf("start reading\n");
+            read(clients[0].client_socket, buffer, sizeof(buffer));            printf("done reading\n");
+            printf(" user input:%s\n", buffer);
+            strcpy(user_move, buffer);
+            printf("user input:%s\n", user_move);
+            if(is_viable_move(user_piece, user_move, board) == 1) {
+              // moved diagonally
+              board[get_piece_position(user_move, board)] = selected_piece;
+              board[get_piece_position(user_piece, board)] = '-';
+              break;
+            }
+            else {
+              printf("You cannot move here. Try again.\n");
+            }
           }
           else {
-            printf("You cannot move here. Try again.\n");
-          }
-        }
-        else {
-          printf("You cannot move this piece. Try again.\n");
-          }
+            printf("You cannot move this piece. Try again.\n");
+            }
         }
       }
       /**
@@ -283,15 +296,21 @@ int main() {
       }
       amount_of_moves++;
       if(amount_of_moves == 50) {
-        printf("50 moves have been reached. Game is a draw.\n");
+        //strcpy(msg, "50 moves have been reached. Game is a draw.\n");
+        to_all_clients(clients, total_players, "50 moves have been reached. Game is a draw.\n");
+
         is_ongoing = 0;
       }
       if (num_white == 0) {
         printf("All white pieces have been taken. Red team wins. \n");
+        to_all_clients(clients, total_players, "All white pieces have been taken. Red team wins. \n");
+
         is_ongoing = 0;
       }
       if (num_red == 0) {
         printf("All red pieces have been taken. White team wins. \n");
+        to_all_clients(clients, total_players, "All red pieces have been taken. White team wins. \n");
+
         is_ongoing = 0;
       }
       display(board);

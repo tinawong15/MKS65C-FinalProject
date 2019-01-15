@@ -67,6 +67,7 @@ int main(int argc, char **argv) {
           printf("Select where to move it [row][column]: \n");
           printf("[client] ");
           fgets(buffer, sizeof(buffer), stdin);
+          printf("%s\n", buffer);
           buffer[strlen(buffer)-1] = '\0';
           write(server_socket, buffer, sizeof(buffer));
         }
