@@ -109,6 +109,7 @@ int main() {
   char selected_piece;
   int selected_piece_index;
   char buffer[4];
+  char buffer2[BUFFER_SIZE];
   int amount_of_moves = 0;
   int num_white = 12;
   int num_red = 12;
@@ -152,9 +153,9 @@ int main() {
           //strcpy(msg, "White checkers turn! There are no jumps available, so select a piece to move [row][column]: \n");
           //printf("%s\n", msg);
           write(clients[1].client_socket, "3", sizeof("3"));
-          read(clients[1].client_socket, buffer, sizeof(buffer));
-          printf(" user input:%s\n", buffer);
-          strcpy(user_piece, buffer);
+          read(clients[1].client_socket, buffer2, sizeof(buffer2));
+          printf(" user input:%s\n", buffer2);
+          strcpy(user_piece, buffer2);
           //fgets(user_piece, 4, stdin);
           selected_piece = board[get_piece_position(user_piece, board)];
           printf("%c\n", selected_piece);
@@ -163,9 +164,10 @@ int main() {
             //fgets(user_move, 4, stdin);
             write(clients[1].client_socket, "4", sizeof("4"));
             printf("start reading\n");
-            read(clients[1].client_socket, buffer, sizeof(buffer));            printf("done reading\n");
-            printf(" user input:%s\n", buffer);
-            strcpy(user_move, buffer);
+            read(clients[1].client_socket, buffer2, sizeof(buffer2));
+            printf("done reading\n");
+            printf(" user input:%s\n", buffer2);
+            strcpy(user_move, buffer2);
             printf("user input:%s\n", user_move);
             if(is_viable_move(user_piece, user_move, board) == 1) {
             // moved diagonally
