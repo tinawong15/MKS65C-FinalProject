@@ -10,6 +10,9 @@ int should_respond(int server_socket){
    if(strcmp(buffer, "1") == 0){
      return 1;
    }
+   else if(strcmp(buffer, "2") == 0){
+     return 2;
+   }
    else {
      return 0;
    }
@@ -37,30 +40,43 @@ int main(int argc, char **argv) {
   printf("%s\n", user_board);
 
   while (1) {
-    printf("Waiting for your turn...\n");
+    //printf("Waiting for your turn...\n");
     while(read(server_socket, buffer, sizeof(buffer))) {
-        //char * cards = buffer;
-        //printf("hand: %s\n", buffer);
-        display(user_board);
-        //display buffer (either is new card or a hand
-        if(strcmp(buffer, "lose") == 0) {
-            //exit
-        } else {
-            printf("What do you want to do?\n");
-            fgets(buffer, BUFFER_SIZE, stdin);
-            if(strcmp(buffer, "display") == 0){
-                display_cards(buffer);
-            }
-            else if(strcmp(buffer, "remove") == 0) {
-                printf("What is the position of the card you want to remove? ");
-                fgets(pos, POS_SIZE, stdin);
-                *strchr(pos, '\n') = 0;
-                //tell server which pos you want to discard
-                write(server_socket, pos, sizeof(pos));
-            }
-            else if(strcmp(buffer, "s") == 0) {
-                write(server_socket, "s", sizeof("s"));
-            }
+      printf("received: [%s]\n", buffer);
+        if(strcmp(buffer, "1") == 0) {
+          printf("[client] ");
+          fgets(buffer, sizeof(buffer), stdin);
+          buffer[strlen(buffer)-1] = '\0';
+          write(server_socket, buffer, sizeof(buffer));
+        }
+        else if (strcmp(buffer, "2") == 0) {
+          printf("[server] Please type your name.\n");
+          fgets(buffer, sizeof(buffer), stdin);
+          buffer[strlen(buffer)-1] = '\0';
+          write(server_socket, buffer, sizeof(buffer));
+        }
+        else if (strcmp(buffer, "3") == 0) {
+          display(user_board);
+          printf("It's your turn! There are no jumps available, so select a piece to move [row][column]: \n");
+          printf("[client] ");
+          fgets(buffer, sizeof(buffer), stdin);
+          buffer[strlen(buffer)-1] = '\0';
+          write(server_socket, buffer, sizeof(buffer));
+        }
+        else if (strcmp(buffer, "4") == 0) {
+          printf("Select where to move it [row][column]: \n");
+          printf("[client] ");
+          fgets(buffer, sizeof(buffer), stdin);
+          buffer[strlen(buffer)-1] = '\0';
+          write(server_socket, buffer, sizeof(buffer));
+        }
+        else if (strcmp(buffer, "10") == 0) {
+          display(user_board);
+          break;
+        }
+        else {
+          printf("%s", buffer);
+          break;
         }
       }
     }

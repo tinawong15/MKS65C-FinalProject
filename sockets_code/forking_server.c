@@ -35,8 +35,8 @@ int main() {
     int client_socket = server_connect(listen_socket);
 
     strcpy(buffer1, "[server] Please type your name.");
+    //write(client_socket, buffer1, sizeof(buffer1));
     write(client_socket, buffer1, sizeof(buffer1));
-
     write(client_socket, "1", sizeof("1"));
 
     read(client_socket, buffer1, sizeof(buffer1));
@@ -58,6 +58,7 @@ int main() {
       joined = 0;
 
       for(i = 0; i < total_players; i++) {
+        printf("%s\n", msg);
         write(clients[i].client_socket, msg, sizeof(msg));
         write(clients[i].client_socket, "1", sizeof("1"));
         read(clients[i].client_socket, buffer1, sizeof(buffer1));
@@ -81,7 +82,9 @@ int main() {
   }
 
   to_all_clients(clients, total_players, "\nWelcome to Checkers!\n");
+
   // write(clients[i].client_socket, "0", sizeof("0"));
+  // ====================================================================
   char board[65];
   strcpy(board, init_board());
   // printf("%s\n", board);
@@ -93,6 +96,7 @@ int main() {
       clients[i].team = 2;
     }
   }
+  // ====================================================================
 
   // for (i = 0; i < player_num; i++){
   //   printf("%d\n", clients[i].team);
@@ -115,21 +119,21 @@ int main() {
   // fgets(start, 3, stdin);
   // start[strlen(start)-1] = '\0';
   // if(strcmp(start, "y") == 0) {
-    printf("Start Checkers Game: \n");
-    display(board);
+  to_all_clients(clients, total_players, "\nThe Checkers game is starting.\n");
+  display(board);
 
   while(is_ongoing) {
     if(turn == 1) {
-      printf("White's turn\n");
+      to_all_clients(clients, total_players, "White's turn.\n");
       //Add King function
       // First checks if there are any jumps possible, starting from the bottom most part of the board.
-      int x, i;
+      int x, a;
       printf("Starting search for jumps\n");
-      for (i = 63; i >= 0 ;i--) {
-        if (board[i] == 'x') {
+      for (a = 63; a >= 0 ;a--) {
+        if (board[a] == 'x') {
           x = check_opponents(i, board);
           while (x == 3 || x == 4) {
-            int new = jump('x', i, x, board);
+            int new = jump('x', a, x, board);
             num_red --;
             display(board);
             x = check_opponents(new, board);
@@ -140,23 +144,29 @@ int main() {
         }
       }
       printf("Ended search for jumps\n");
-
+      //write(clients[i].client_socket, "1", sizeof("1"));
       if (!x) {
         while(1) {
-          printf("White checkers turn! There are no jumps available, so select a piece to move [row][column]: \n");
-          write(clients[i].client_socket, "1", sizeof("1"));
-          read(clients[i].client_socket, buffer, sizeof(buffer));
+          //printf("White checkers turn! There are no jumps available, so select a piece to move [row][column]: \n");
+          //write(clients[1].client_socket, "10", sizeof("10"));
+          //strcpy(msg, "White checkers turn! There are no jumps available, so select a piece to move [row][column]: \n");
+          //printf("%s\n", msg);
+          write(clients[1].client_socket, "3", sizeof("3"));
+          read(clients[1].client_socket, buffer, sizeof(buffer));
+          printf(" user input:%s\n", buffer);
           strcpy(user_piece, buffer);
           //fgets(user_piece, 4, stdin);
-          user_piece[strlen(user_piece)-1] = '\0';
           selected_piece = board[get_piece_position(user_piece, board)];
+          printf("%c\n", selected_piece);
           if(selected_piece == 'x') {
             printf("Select where to move it [row][column]: \n");
             //fgets(user_move, 4, stdin);
-            write(clients[i].client_socket, "1", sizeof("1"));
-            read(clients[i].client_socket, buffer, sizeof(buffer));
+            write(clients[1].client_socket, "4", sizeof("4"));
+            printf("start reading\n");
+            read(clients[1].client_socket, buffer, sizeof(buffer));            printf("done reading\n");
+            printf(" user input:%s\n", buffer);
             strcpy(user_move, buffer);
-            user_move[strlen(user_move)-1] = '\0';
+            printf("user input:%s\n", user_move);
             if(is_viable_move(user_piece, user_move, board) == 1) {
             // moved diagonally
               board[get_piece_position(user_move, board)] = selected_piece;
@@ -164,13 +174,19 @@ int main() {
               break;
             }
             else {
-              printf("You cannot move here. Try again.\n");
+              strcpy(msg, "You cannot move here. Try again.\n");
+              write(clients[i].client_socket, msg, sizeof(msg));
             }
+
           }
           else {
-          printf("You cannot move this piece. Try again.\n");
+            strcpy(msg, "You cannot move this piece. Try again.\n");
+            write(clients[i].client_socket, msg, sizeof(msg));
           }
+
         }
+        turn = 2;
+
       }
       /**
       if (x == 3 || x == 4 ) {
@@ -194,7 +210,6 @@ int main() {
 
       }
       **/
-      turn = 2;
     }
 
     else {
@@ -295,7 +310,7 @@ void to_all_clients(struct client clients[], int num_players, char* msg){
    strcpy(buffer, msg);
    for (i = 0; i < num_players; i++){
      write(clients[i].client_socket, buffer, sizeof(buffer));
-     write(clients[i].client_socket, "0", sizeof("0"));
+     //write(clients[i].client_socket, "0", sizeof("0"));
    }
 }
 
