@@ -11,22 +11,25 @@ For our minimum viable product, two users will be allowed to join the server. On
 ## Instructions to Run
 1. Go to repo.
 ```
-cd MKS65C-FinalProject/sockets_code
+cd MKS65C-FinalProject/
 ```
-2. Compile code.
+2. Change directory into final project.
+```
+cd sockets_code
+```
+3. Compile code.
 ```
 $ make
 ```
-3. Run server.
+4. Run server.
 ```
 $ ./server
 ```
-4. Run client.
+5. Run client.
 ```
 $ ./client
 ```
 
 ## Known Bugs
 - Once the client joins the server, you can only say yes to continuing the game. You can say no, but the server does not know that the player has left and will continue the game regardless.
-- If you are inputting more than 4 letters when the user is prompted for a move or a piece, the game will break.
 - Regular checkers can kill king checkers.
