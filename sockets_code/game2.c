@@ -23,59 +23,6 @@ int num_white = 12;
 int num_red = 12;
 char board[65];
 
-// int play_game(struct client clients[], int num_players, char * board) {
-//   printf("has the game started?\n");
-//   int i;
-//   //strcpy(user_board, board);
-//   char buffer[BUFFER_SIZE];
-//   // strcpy(buffer, msg);
-//   int turn = 1;
-//   int is_ongoing = 1;
-//   char client_team[2];
-//   printf("Starting to choose turns\n");
-//   // while(is_ongoing) {
-//     for (i = 0; i < num_players; i++){
-//
-//       if(clients[i].team == turn && turn == 1) {
-//         printf("Turn 1:\n");
-//         printf("hereserver: %s\n", user_board);
-//         sprintf(client_team, "%d", clients[i].team);
-//         strcpy(buffer, user_board)
-//         write(clients[i].client_socket, buffer, sizeof(BUFFER_SIZE));
-//         memset(buffer, 0, BUFFER_SIZE);
-//         printf("it got here1");
-//         write(clients[i].client_socket, "0", sizeof("0"));
-//         printf("it got here2");
-//
-//         strcpy(buffer, client_team);
-//         write(clients[i].client_socket, client_team, sizeof(BUFFER_SIZE));
-//         write(clients[i].client_socket, "0", sizeof("0"));
-//
-//         write(clients[i].client_socket, "It's yo turn so select a piece to move [row][column]: \n", sizeof(BUFFER_SIZE));
-//         write(clients[i].client_socket, "1", sizeof("1"));
-//         read(clients[i].client_socket, buffer, sizeof(buffer));
-//         write(clients[i].client_socket, "Select where to move it [row][column]: \n", sizeof(BUFFER_SIZE));
-//         write(clients[i].client_socket, "1", sizeof("1"));
-//         read(clients[i].client_socket, buffer, sizeof(buffer));
-//
-//         turn = 2;
-//       }
-//     }
-//     for (i = 0; i < num_players; i++){
-//       if(clients[i].team == turn && turn == 2) {
-//         // printf("%s\n", user_board);
-//         play(clients, user_board, turn);
-//         write(clients[i].client_socket, user_board, sizeof(BUFFER_SIZE));
-//         write(clients[i].client_socket, "0", sizeof("0"));
-//         // strcpy(board, client_game(board));
-//         turn = 1;
-//       }
-//     }
-//     is_ongoing = 0;
-//   // }
-//   return 0;
-// }
-
 void display(char * board) {
   printf("\n   h  g  f  e  d  c  b  a\n1");
   int i;
@@ -153,9 +100,6 @@ int get_piece_position(char * input, char * board) {
   return pos;
 }
 
-
-
-
 int check_opponents(int piece_loc, char * board) {
   int piece_index = piece_loc; //get_piece_position(piece, board);
   //top left
@@ -194,6 +138,7 @@ int check_opponents(int piece_loc, char * board) {
   else
     return 0;
 }
+
 int is_viable_move(char * piece, char * move, char * board) {
   int piece_index = get_piece_position(piece, board);
   int move_index = get_piece_position(move, board);
@@ -241,6 +186,7 @@ int is_viable_move(char * piece, char * move, char * board) {
   }
   return 0;
   }
+
 int jump(char piece, int piece_loc, int direction, char * board) {
   //char selected_piece;
   int selected_piece_index;
@@ -303,204 +249,3 @@ char * init_board() {
   }
   return board;
 }
-
-// char * play(struct client clients[], char * board, int turn) {
-//   char start[3];
-//   int is_ongoing = 1;
-//   char user_piece[4];
-//   char user_move[4];
-//   char selected_piece;
-//   int selected_piece_index;
-//   char buffer[4];
-//   //int turn = 1; // 1 if it is white team's turn, 2 if it is red team's turn
-//   // printf("Do you want to start playing? [y/n]\n");
-//   // fgets(start, 3, stdin);
-//   // start[strlen(start)-1] = '\0';
-//   // if(strcmp(start, "y") == 0) {
-//     printf("Start Checkers Game: \n");
-//     display(board);
-//
-//      while(is_ongoing) {
-//       if(turn == 1) {
-//         printf("White's turn\n");
-//         //Add King function
-//         // First checks if there are any jumps possible, starting from the bottom most part of the board.
-//         int x, i;
-//         printf("Starting search for jumps\n");
-//         for (i = 63; i >= 0 ;i--) {
-//           if (board[i] == 'x') {
-//             x = check_opponents(i, board);
-//             while (x == 3 || x == 4) {
-//
-//               int new = jump('x', i, x, board);
-//               num_red --;
-//               display(board);
-//               x = check_opponents(new, board);
-//               //printf("%d\n",i);
-//               printf("found an enemy piece i'm White \n");
-//               break;
-//               if (!x){
-//                 printf("No more jumps available");
-//                 turn = 1;
-//                 break;
-//               }
-//
-//             }
-//           }
-//         }
-//         printf("Ended search for jumps\n");
-//
-//         if (!x) {
-//           while(1) {
-//             printf("White checkers turn! There are no jumps available, so select a piece to move [row][column]: \n");
-//             write(clients[i].client_socket, "1", sizeof("1"));
-//             read(clients[i].client_socket, buffer, sizeof(buffer));
-//             strcpy(user_piece, buffer);
-//             //fgets(user_piece, 4, stdin);
-//             user_piece[strlen(user_piece)-1] = '\0';
-//             selected_piece = board[get_piece_position(user_piece, board)];
-//             if(selected_piece == 'x') {
-//               printf("Select where to move it [row][column]: \n");
-//               //fgets(user_move, 4, stdin);
-//               write(clients[i].client_socket, "1", sizeof("1"));
-//               read(clients[i].client_socket, buffer, sizeof(buffer));
-//               strcpy(user_move, buffer);
-//               user_move[strlen(user_move)-1] = '\0';
-//               if(is_viable_move(user_piece, user_move, board) == 1) {
-//               // moved diagonally
-//                 board[get_piece_position(user_move, board)] = selected_piece;
-//                 board[get_piece_position(user_piece, board)] = '-';
-//                 break;
-//               }
-//               else {
-//                 printf("You cannot move here. Try again.\n");
-//               }
-//             }
-//             else {
-//             printf("You cannot move this piece. Try again.\n");
-//             }
-//           }
-//         }
-//         /**
-//         if (x == 3 || x == 4 ) {
-//
-//           printf("x : %d\n", x);
-//           printf("Ya jumping now.");
-//           int new = jump('x', i, x, board);
-//           printf("new position: %d\n", new);
-//           num_white --;
-//           display(board);
-//           x = check_opponents(new, board);
-//           printf("after checking opponents: %d\n", x);
-//
-//           if (!x){
-//             printf("No more jumps available");
-//             turn = 1;
-//             break;
-//           }
-//
-//           //break;
-//
-//         }
-//         **/
-//         turn = 2;
-//       }
-//
-//       else {
-//         printf("Red's turn.\n");
-//         // Add: King function
-//         // First checks if there are any jumps possible, starting from the upper most part of the board.
-//         int x, i;
-//         printf("Starting search for jumps\n");
-//         for (i = 0; i < 64 ;i++) {
-//           if (board[i] == 'o') {
-//             x = check_opponents(i, board);
-//             while (x == 1 || x == 2) {
-//
-//               int new = jump('o', i, x, board);
-//               num_white --;
-//               display(board);
-//               x = check_opponents(new, board);
-//               //printf("%d\n",i);
-//               printf("found an enemy piece i'm red\n");
-//               break;
-//               if (!x){
-//                 printf("No more jumps available");
-//                 turn = 1;
-//                 break;
-//               }
-//
-//             }
-//           }
-//         }
-//         printf("Ended search for jumps\n");
-//         if (!x) {
-//           while(1) {
-//           printf("Red checkers turn! There are no jumps available, so select a piece to move [row][column]: \n");
-//           fgets(user_piece, 4, stdin);
-//           user_piece[strlen(user_piece)-1] = '\0';
-//           selected_piece = board[get_piece_position(user_piece, board)];
-//           if(selected_piece == 'o') {
-//             printf("Select where to move it [row][column]: \n");
-//             fgets(user_move, 4, stdin);
-//             user_move[strlen(user_move)-1] = '\0';
-//             if(is_viable_move(user_piece, user_move, board) == 1) {
-//             // moved diagonally
-//               board[get_piece_position(user_move, board)] = selected_piece;
-//               board[get_piece_position(user_piece, board)] = '-';
-//               break;
-//             }
-//             else {
-//               printf("You cannot move here. Try again.\n");
-//             }
-//           }
-//           else {
-//           printf("You cannot move this piece. Try again.\n");
-//           }
-//         }
-//       }
-//       /**
-//         if (x == 1 || x == 2) {
-//           printf("x : %d\n", x);
-//           printf("Ya jumping now.");
-//           int new = jump('o', i, x, board);
-//           printf("new position: %d\n", new);
-//           num_white --;
-//           display(board);
-//           x = check_opponents(new, board);
-//           printf("after checking opponents: %d\n", x);
-//
-//           if (!x){
-//             printf("No more jumps available");
-//             turn = 1;
-//             break;
-//           }
-//
-//           //break;
-//         }
-//         **/
-//         turn = 1;
-//       }
-//       amount_of_moves++;
-//       if(amount_of_moves == 50) {
-//         printf("50 moves have been reached. Game is a draw.\n");
-//         is_ongoing = 0;
-//       }
-//       if (num_white == 0) {
-//         printf("All white pieces have been taken. Red team wins. \n");
-//         is_ongoing = 0;
-//       }
-//       if (num_red == 0) {
-//         printf("All red pieces have been taken. White team wins. \n");
-//         is_ongoing = 0;
-//       }
-//       display(board);
-//
-//     }
-//    // else {
-//    //   exit(0);
-//    // }
-//
-//   //return board;
-//   return 0;
-// }

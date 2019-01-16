@@ -28,11 +28,6 @@ int is_viable_move(char * piece, char * move, char * board);
 
 char * init_board();
 
-//char * play(struct client clients[], char * board, int turn);
-
-char * client_game(char * board);
-
-//int play_game(struct client clients[], int num_players, char * board);
-
 int check_opponents(int piece_loc, char * board);
+
 int jump(char piece, int piece_loc, int direction, char * board);

@@ -70,9 +70,9 @@ int main() {
         else {
           strcpy(msg, "Player ");
           strcat(msg, clients[i].name);
-          strcat(msg, " has left.");
+          strcat(msg, " has left.\n");
           to_all_clients(clients, total_players, msg);
-          close(clients[i].client_socket);
+          write(clients[i].client_socket, "exit", sizeof("exit"));
         }
       }
 
@@ -84,7 +84,6 @@ int main() {
 
   to_all_clients(clients, total_players, "\nWelcome to Checkers!\n");
 
-  // write(clients[i].client_socket, "0", sizeof("0"));
   // ====================================================================
   char board[65];
   strcpy(board, init_board());
@@ -99,17 +98,13 @@ int main() {
   }
   // ====================================================================
 
-  // for (i = 0; i < player_num; i++){
-  //   printf("%d\n", clients[i].team);
-  // }
-  //play_game(clients, total_players, board);
   char start[3];
   int is_ongoing = 1;
-  char user_piece[4];
-  char user_move[4];
+  char user_piece[BUFFER_SIZE];
+  char user_move[BUFFER_SIZE];
   char selected_piece;
   int selected_piece_index;
-  char buffer[4];
+  char buffer[BUFFER_SIZE];
   char buffer2[BUFFER_SIZE];
   char buffer3[BUFFER_SIZE];
   char buffer4[BUFFER_SIZE];
@@ -182,7 +177,7 @@ int main() {
               if (get_piece_position(user_move, board) >56 )
                 board[get_piece_position(user_move, board)] = 'X';
               board[get_piece_position(user_move, board)] = selected_piece;
-              board[get_piece_position(user_piece, board)] = '-';\
+              board[get_piece_position(user_piece, board)] = '-';
 
               break;
             }
@@ -216,7 +211,6 @@ int main() {
               // printf("%s\n", buffer4);
               write(clients[1].client_socket, buffer4, sizeof(buffer4));
             }
-
           }
           else if(selected_piece == 'X') {
             printf("Select where to move it [row][column]: \n");
@@ -276,19 +270,18 @@ int main() {
               // printf("%s\n", buffer4);
               write(clients[1].client_socket, buffer4, sizeof(buffer4));
             }
-
           }
           else {
             strcpy(buffer4, "You cannot move this piece. Try again.\n");
             write(clients[1].client_socket, buffer4, sizeof(buffer4));
           }
-
         }
-        display(board);
-        turn = 2;
-        strcpy(buffer3, board);
-        write(clients[0].client_socket, buffer3, sizeof(buffer3));
       }
+    display(board);
+    turn = 2;
+    strcpy(buffer3, board);
+    write(clients[0].client_socket, buffer3, sizeof(buffer3));
+  }
       /**
       if (x == 3 || x == 4 ) {
 
@@ -311,7 +304,6 @@ int main() {
 
       }
       **/
-    }
 
     else {
       to_all_clients(clients, total_players, "Red's turn.\n");
@@ -530,14 +522,3 @@ void to_all_clients(struct client clients[], int num_players, char* msg){
      //write(clients[i].client_socket, "0", sizeof("0"));
    }
 }
-
-// void subserver(int client_socket) {
-//   char buffer[BUFFER_SIZE];
-//
-//   while (read(client_socket, buffer, sizeof(buffer))) {
-//
-//     printf("[subserver %d] received: [%s]\n", getpid(), buffer);
-//     process(buffer);
-//     write(client_socket, buffer, sizeof(buffer));
-//   }//end read loop
-// }
