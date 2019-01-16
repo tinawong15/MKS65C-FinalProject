@@ -8,13 +8,6 @@ void to_all_clients(struct client clients[], int num_players, char* msg);
 
 static void sighandler(int signo){
   if (signo == SIGINT){
-    printf("Closing pipes...\n");
-    if(unlink("to_client") != -1){
-      printf("Pipe to_client deleted.\n" );
-    }
-    if(unlink("to_parent") != -1){
-      printf("Pipe to_parent deleted.\n" );
-    }
     exit(0);
   }
 }
@@ -26,6 +19,8 @@ int main() {
   int i;
   char buffer1[BUFFER_SIZE];
   listen_socket = server_setup();
+
+  signal(SIGINT, sighandler);
 
   struct client player;
   struct client clients[MAX];
@@ -55,7 +50,7 @@ int main() {
       strcpy(msg, "\n");
       sprintf(total, "%d", total_players);
       strcat(msg, total);
-      strcat(msg, " players have joined the game. Continue? (y/n)?\n");
+      strcat(msg, " players have joined the game. Type [y] to continue.\n");
       joined = 0;
 
       for(i = 0; i < total_players; i++) {
@@ -67,13 +62,13 @@ int main() {
         if(!strcmp(buffer1, "y")) {
           joined++;
         }
-        else {
-          strcpy(msg, "Player ");
-          strcat(msg, clients[i].name);
-          strcat(msg, " has left.\n");
-          to_all_clients(clients, total_players, msg);
-          write(clients[i].client_socket, "exit", sizeof("exit"));
-        }
+        // else {
+        //   strcpy(msg, "Player ");
+        //   strcat(msg, clients[i].name);
+        //   strcat(msg, " has left.\n");
+        //   // to_all_clients(clients, total_players, msg);
+        //   // write(clients[i].client_socket, "exit", sizeof("exit"));
+        // }
       }
 
       if (joined == total_players){
@@ -149,12 +144,15 @@ int main() {
       }
       printf("Ended search for jumps\n");
       //write(clients[i].client_socket, "1", sizeof("1"));
+
       if (!x) {
+        int i;
         while(1) {
           //printf("White checkers turn! There are no jumps available, so select a piece to move [row][column]: \n");
           //write(clients[1].client_socket, "10", sizeof("10"));
           //strcpy(msg, "White checkers turn! There are no jumps available, so select a piece to move [row][column]: \n");
           //printf("%s\n", msg);
+          // for(i = 0; i < )
           write(clients[1].client_socket, "3", sizeof("3"));
           read(clients[1].client_socket, buffer2, sizeof(buffer2));
           printf(" user input:%s\n", buffer2);
