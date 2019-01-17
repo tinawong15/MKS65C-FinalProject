@@ -139,9 +139,9 @@ int check_opponents(int piece_loc, char * board) {
     return 0;
 }
 
-int is_viable_move(char * piece, char * move, char * board) {
+int is_viable_move(char * piece, int move_index, char * board) {
   int piece_index = get_piece_position(piece, board);
-  int move_index = get_piece_position(move, board);
+  //int move_index = get_piece_position(move, board);
   if(board[piece_index] == 'x') { // board piece is white
     // move diagonally
     if(piece_index + 7 == move_index || piece_index + 9 == move_index) {

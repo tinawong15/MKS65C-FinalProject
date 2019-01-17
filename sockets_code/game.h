@@ -12,19 +12,20 @@
 #include <ctype.h>
 
 #define BUFFER_SIZE 1024
-#define MAX 2
+#define MAX 6
 
 struct client {
   int client_socket;
   char name[256];
   int team;
+  int selected;
 };
 
 void display(char * board);
 
 int get_piece_position(char * input, char * board);
 
-int is_viable_move(char * piece, char * move, char * board);
+int is_viable_move(char * piece, int move_index, char * board);
 
 char * init_board();
 
