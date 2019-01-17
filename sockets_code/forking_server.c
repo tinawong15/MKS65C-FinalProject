@@ -249,9 +249,9 @@ int main() {
           //printf("%d\n", most_voted);
           //printf(" recieved votes: %d\n", most_voted);
           while (most_voted == -1) {
+            to_white_clients(clients, total_players, "Voting is a tie. Please vote again.\n");
             ask_w_pieces(1);
             most_voted = voting(recieve_votes(), total_players / 2);
-            to_white_clients(clients, total_players, "Voting is a tie. Please vote again.\n");
           }
           //should display piece with most votes
 
@@ -267,9 +267,10 @@ int main() {
             //printf("most voted move: %d\n", most_voted);
 
             while (most_voted == -1) {
+              to_white_clients(clients, total_players, "Voting is a tie. Please vote again.\n");
               ask_w_pieces(2);
               most_voted = voting(recieve_votes(), total_players / 2);
-              to_white_clients(clients, total_players, "Voting is a tie. Please vote again.\n");
+
             }
 
             move_index = most_voted;
@@ -321,9 +322,10 @@ int main() {
             //printf("%d\n", most_voted);
             //printf(" recieved votes: %d\n", most_voted);
             while (most_voted == -1) {
+              to_white_clients(clients, total_players, "Voting is a tie. Please vote again.\n");
               ask_w_pieces(2);\
               most_voted = voting(recieve_votes(), total_players / 2);
-              to_white_clients(clients, total_players, "Voting is a tie. Please vote again.\n");
+
             }
 
             move_index = most_voted;
@@ -400,9 +402,10 @@ int main() {
           most_voted = voting(recieve_votes(), total_players / 2);
           //printf("most voted piece : %d\n", most_voted);
           while (most_voted == -1) {
+            to_red_clients(clients, total_players, "Voting is a tie. Please vote again.\n");
             ask_r_pieces(1);
             most_voted = voting(recieve_votes(), total_players / 2);
-            to_red_clients(clients, total_players, "Voting is a tie. Please vote again.\n");
+
           }
           //should display piece with most votes
 
@@ -420,9 +423,10 @@ int main() {
             most_voted = voting(recieve_votes(), total_players / 2);
             //printf("most voted move %d\n", most_voted);
             while (most_voted == -1) {
+              to_red_clients(clients, total_players, "Voting is a tie. Please vote again.\n");
               ask_r_pieces(2);
               most_voted = voting(recieve_votes(), total_players / 2);
-              to_red_clients(clients, total_players, "Voting is a tie. Please vote again.\n");
+
             }
 
             move_index = most_voted;
@@ -471,9 +475,10 @@ int main() {
             most_voted = voting(recieve_votes(), total_players / 2);
             //printf("most voted move %d\n", most_voted);
             while (most_voted == -1) {
+              to_red_clients(clients, total_players, "Voting is a tie. Please vote again.\n");
               ask_r_pieces(2);
               most_voted = voting(recieve_votes(), total_players / 2);
-              to_red_clients(clients, total_players, "Voting is a tie. Please vote again.\n");
+
             }
             move_index = most_voted;
             //printf("move index: %d\n", move_index);
