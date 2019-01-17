@@ -82,7 +82,7 @@ void setup() {
       strcpy(msg, "\n");
       sprintf(total, "%d", total_players);
       strcat(msg, total);
-      strcat(msg, " players have joined the game. Continue? (y/n)?\n");
+      strcat(msg, " players have joined the game. Type [y] to continue.\n");
       joined = 0;
 
       for(i = 0; i < total_players; i++) {
@@ -99,15 +99,7 @@ void setup() {
             write(clients[i].client_socket, msg, sizeof(msg));
 
         }
-        /**
-        else {
-          strcpy(msg, "Player ");
-          strcat(msg, clients[i].name);
-          strcat(msg, " has left.\n");
-          to_all_clients(clients, total_players, msg);
-          write(clients[i].client_socket, "exit", sizeof("exit"));
-        }
-        **/
+
       }
 
       if (joined == total_players){
