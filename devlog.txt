@@ -42,7 +42,17 @@ tinaW, maggieZ -- 2019-01-13 18:35
 
 maggieZ -- 2019-01-14 02:24
 - Merged basic checkers game with the server/client connection
+- Finished voting, but not incorporated
 
 tinaW -- 2019-01-14 22:45
 - Passes board from client to server
 - Updates board each time board is passed
+
+maggieZ -- 2019-01-15
+- Fully incorporated voting
+- Bug: board updates a turn late
+
+maggieZ -- 2019-01-16
+- Fixed multiplayer connection
+- More error handling for wrong server inputs
+- Fixed board bug
